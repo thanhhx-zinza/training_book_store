@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function showLoginForm ()
+    public function show()
     {
         return view("User.Auth.login");
     }
 
-    public function login (Request $request)
+    public function login(Request $request)
     {
         $request->validate(
             [
@@ -25,8 +25,7 @@ class LoginController extends Controller
         );
         $email = $request->input('email');
         $password = $request->input('password');
-        if (Auth::attempt(['email' => $email, 'password' => $password])) 
-        {
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $request->session()->put('user', ['email' => $email]);
             return redirect("/home");
         } else {
@@ -34,5 +33,4 @@ class LoginController extends Controller
             return redirect('/login');
         }
     }
-    
 }

@@ -3,5 +3,9 @@
     <p>Thanh cong</p>
     <?php $user = session()->get('user'); ?>
     <p> Welcome: {{$user['email']}} </p>
-    <a href="/logout" class="btn btn-primary">Log out</a>
+    <form action="{{route('logout')}}" method="post">
+        @csrf
+        @method('delete')
+        <button class="btn btn-primary" type="submit">Log out</button>
+    </form>
 @endsection

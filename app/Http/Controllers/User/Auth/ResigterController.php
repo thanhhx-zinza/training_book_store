@@ -12,21 +12,21 @@ use Illuminate\Support\Facades\Auth;
 
 class ResigterController extends Controller
 {
-    public function showResigterForm ()
+    public function show()
     {
-        return view('User.Auth.resigter');
+        return view('User.Auth.register');
     }
 
-    public function resigter (ResigterRequest $request)
+    public function register(ResigterRequest $request)
     {
-        $formValue = 
+        $formValue =
         [
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ];
         $user = User::create($formValue);
         Auth::login($user);
-        $request->session()->put('user',['email' => $user -> email]);
+        $request->session()->put('user', ['email' => $user -> email]);
         return redirect('/home');
     }
 }

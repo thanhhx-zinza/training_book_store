@@ -21,12 +21,12 @@ Route::get('/home', function () {
 });
 
 //resigter
-Route::get('/resigter', [ResigterController::class, 'showResigterForm']);
-Route::post('/resigter', [ResigterController::class, 'resigter']);
+Route::get('/register', [ResigterController::class, 'show']);
+Route::post('/register', [ResigterController::class, 'register']);
 
 //login
-Route::get('/login', [LoginController::class, 'showLoginForm']);
+Route::get('/login', [LoginController::class, 'show']);
 Route::post('/login', [LoginController::class, 'login']);
 
 //logout
-Route::get('/logout', [LogoutController::class, 'logout']);
+Route::delete('/logout', [LogoutController::class, 'logout'])->name('logout');
