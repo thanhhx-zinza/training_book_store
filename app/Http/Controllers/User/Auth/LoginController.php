@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facade\Hash;
@@ -27,7 +28,13 @@ class LoginController extends Controller
         $password = $request->input('password');
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $request->session()->put('user', ['email' => $email]);
-            return redirect("/home");
+            $user = User::current($email);
+            $profile = Profile::current($user->id)->first();
+            if ($profile == null) {
+                return redirect()->route('createProfile', $user->id);
+            } else {
+                return redirect("/home");
+            }
         } else {
             $request->session()->flash('error', 'Đăng nhập thất bại');
             return redirect('/login');

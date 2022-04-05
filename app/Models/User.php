@@ -46,4 +46,8 @@ class User extends Authenticatable
     ];
 
     protected $table = "users";
+    public function scopeCurrent($query, $email)
+    {
+        return $query->where('email', $email)->first();
+    }
 }

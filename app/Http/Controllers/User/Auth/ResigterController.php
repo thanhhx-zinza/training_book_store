@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Requests\ResigterRequest;
+use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +27,12 @@ class ResigterController extends Controller
         ];
         $user = User::create($formValue);
         Auth::login($user);
-        $request->session()->put('user', ['email' => $user->email]);
-        return redirect('/home');
+        $profile = Profile::current($user->id)->first();
+        if ($profile == null) {
+            $request->session()->put('user', ['email' => $user->email]);
+            return redirect()->route('createProfile', $user->id);
+        } else {
+            return redirect("/home");
+        }
     }
 }
