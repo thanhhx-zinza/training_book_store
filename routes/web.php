@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\User\Auth\LoginController;
+use App\Http\Controllers\User\Auth\ResigterController;
+use App\Http\Controllers\User\Auth\LogoutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/home', function () {
+    return view('home');
 });
+
+//resigter
+Route::get('/register', [ResigterController::class, 'show']);
+Route::post('/register', [ResigterController::class, 'register']);
+
+//login
+Route::get('/login', [LoginController::class, 'show']);
+Route::post('/login', [LoginController::class, 'login']);
+
+//logout
+Route::delete('/logout', [LogoutController::class, 'logout'])->name('logout');
