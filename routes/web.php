@@ -3,6 +3,8 @@
 use App\Http\Controllers\User\Auth\LoginController;
 use App\Http\Controllers\User\Auth\ResigterController;
 use App\Http\Controllers\User\Auth\LogoutController;
+use App\Http\Controllers\User\ProfileController;
+use App\Models\Profile;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,3 +32,9 @@ Route::post('/login', [LoginController::class, 'login']);
 
 //logout
 Route::delete('/logout', [LogoutController::class, 'logout'])->name('logout');
+
+//profile
+Route::prefix('profile')->group(function () {
+    Route::get('/create/{id}', [ProfileController::class, "show"])->name('createProfile');
+    Route::post('/create/{id}', [ProfileController::class, "save"])->name("saveProfile");
+});

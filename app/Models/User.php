@@ -46,4 +46,14 @@ class User extends Authenticatable
     ];
 
     protected $table = "users";
+
+    /**
+     * Get the profile associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne(Profile::class, 'user_id');
+    }
 }
