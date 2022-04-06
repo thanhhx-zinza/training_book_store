@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
+    public function show($id)
+    {
+        return view("User.createProfile", compact('id'));
+    }
+
     public function save(ProfileRequest $request, $id)
     {
         $formValue = [

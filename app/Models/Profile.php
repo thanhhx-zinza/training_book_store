@@ -12,8 +12,13 @@ class Profile extends Model
     protected $table = "profile";
     protected $guarded  = "";
 
-    public function scopeCurrent($query, $userId)
+    /**
+     * Get the user that owns the Profile
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
     {
-        return $query->where('user_id', $userId)->first();
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

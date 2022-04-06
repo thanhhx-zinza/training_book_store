@@ -46,8 +46,14 @@ class User extends Authenticatable
     ];
 
     protected $table = "users";
-    public function scopeCurrent($query, $email)
+
+    /**
+     * Get the profile associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function profile()
     {
-        return $query->where('email', $email)->first();
+        return $this->hasOne(Profile::class, 'user_id');
     }
 }

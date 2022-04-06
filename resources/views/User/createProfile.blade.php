@@ -33,6 +33,7 @@
         <label for="">Address</label>
         <input type="text" name="address" class="form-control" placeholder="enter your address">
     </div>
+    <p>User ID: {{$id}}</p>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
 @endsection
