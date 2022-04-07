@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function show($id)
     {
-        return view("User.createProfile", compact('id'));
+        return view("User.createProfile", ['id' => $id]);
     }
 
     public function save(ProfileRequest $request, $id)
