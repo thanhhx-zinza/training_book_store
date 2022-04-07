@@ -35,7 +35,7 @@ class LoginControllerTest extends TestCase
                 'password' => "password",
             ]
         );
-        $response->assertRedirect('/home');
+        $response->assertRedirect('/profile/create/'.$user->id);
     }
 
     public function testLoginFail()
