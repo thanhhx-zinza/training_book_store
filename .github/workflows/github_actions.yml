@@ -35,6 +35,8 @@ jobs:
       run: chmod -R 777 storage bootstrap/cache
     - name: Run migration
       run: php artisan migrate
+    - name: Run seeder
+      run: php artisan db:seed
     - name: Execute tests
       run: vendor/bin/phpunit
     - name: Install code sniffer
