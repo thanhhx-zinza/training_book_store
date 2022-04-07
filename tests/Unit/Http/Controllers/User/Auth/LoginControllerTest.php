@@ -32,10 +32,10 @@ class LoginControllerTest extends TestCase
             [
                 '_token' => csrf_token(),
                 'email' => $user->email,
-                'password' => "02112001",
+                'password' => "password",
             ]
         );
-        $response->assertRedirect('/home');
+        $response->assertRedirect('/profile/create/'.$user->id);
     }
 
     public function testLoginFail()
@@ -47,7 +47,7 @@ class LoginControllerTest extends TestCase
             [
                 '_token' => csrf_token(),
                 'email' => $user->email,
-                'password' => "12345",
+                'password' => "password2",
             ]
         );
         $response->assertRedirect('/login');
