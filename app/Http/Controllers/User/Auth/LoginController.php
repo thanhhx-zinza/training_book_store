@@ -25,7 +25,7 @@ class LoginController extends Controller
             $request->session()->put('user', ['email' => $email]);
             $user = Auth::user();
             if ($user->profile == null) {
-                return redirect()->route('createProfile', $user->id);
+                return redirect()->route('createProfile');
             } else {
                 return redirect("/home");
             }

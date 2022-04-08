@@ -8,6 +8,11 @@
             {{ session('error') }}
         </div>
     @endif
+    @if (session('notice'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('notice') }}
+        </div>
+    @endif
     </div>
     <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
