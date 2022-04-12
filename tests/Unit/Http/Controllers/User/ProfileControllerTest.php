@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Http\Controllers\User;
 
-use App\Models\User;
-use Tests\TestCase;
-use Faker\Factory;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Session;
 use Hash;
+use Faker\Factory;
+use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProfileControllerTest extends TestCase
 {
@@ -22,30 +22,41 @@ class ProfileControllerTest extends TestCase
     {
         Session::start();
         $faker = Factory::create();
-        $formValue =
-        [
-            '_token' => csrf_token(),
-            'email' => $faker->email,
-            'password' => "02112001",
-        ];
-        $user = User::create($formValue);
-        $response = $this->get('/profile/create/'.$user->id);
-        $response->assertOk();
+        $response = $this->post(
+            'register',
+            [
+                '_token' => csrf_token(),
+                'email' => $faker->email,
+                'password' => "02112001",
+            ]
+        );
+        $response->assertRedirect('/profile');
     }
 
     public function testSaveProfile()
     {
         Session::start();
         $faker = Factory::create();
-        $formValue =
-        [
-            '_token' => csrf_token(),
-            'email' => $faker->email,
-            'password' => "02112001",
-        ];
-        $user = User::create($formValue);
         $response = $this->post(
-            'profile/create/'.$user->id,
+            'register',
+            [
+                '_token' => csrf_token(),
+                'email' => $faker->email,
+                'password' => "02112001",
+            ]
+        );
+        $user = User::orderBy('id', 'DESC')->first();
+        $response = $this->post(
+            '/login',
+            [
+                '_token' => csrf_token(),
+                'email' => $user->email,
+                'password' => "02112001",
+            ]
+        );
+        $response->assertRedirect('/profile');
+        $response = $this->post(
+            '/profile',
             [
                 'name' => $faker->name,
                 "first_name" => $faker->name,
@@ -54,7 +65,6 @@ class ProfileControllerTest extends TestCase
                 'phone_number' => $faker->phoneNumber,
                 "gender" => $faker->randomElement(['male', 'female']),
                 "address" => $faker->name,
-                'user_id' => $user->id,
             ]
         );
         $response->assertRedirect("/home");

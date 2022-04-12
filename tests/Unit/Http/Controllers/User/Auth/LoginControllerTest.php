@@ -26,16 +26,25 @@ class LoginControllerTest extends TestCase
     public function testLogin()
     {
         Session::start();
-        $user = User::first();
+        $faker = Factory::create();
+        $response = $this->post(
+            'register',
+            [
+                '_token' => csrf_token(),
+                'email' => $faker->email,
+                'password' => "02112001",
+            ]
+        );
+        $user = User::orderBy('id', 'DESC')->first();
         $response = $this->post(
             '/login',
             [
                 '_token' => csrf_token(),
                 'email' => $user->email,
-                'password' => "password",
+                'password' => "02112001",
             ]
         );
-        $response->assertRedirect('/profile/create/'.$user->id);
+        $response->assertRedirect('/profile');
     }
 
     public function testLoginFail()
@@ -71,6 +80,6 @@ class LoginControllerTest extends TestCase
                 'password' => 1234,
             ]
         );
-        $response->assertRedirect('/profile/create/'.$user->id);
+        $response->assertRedirect('/profile');
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-<form action="{{route('saveProfile', $id)}}" method="POST">
+<form action="{{route('saveProfile')}}" method="POST">
     @csrf
     <div class="form-group">
         <label for="">Name</label>
@@ -33,7 +33,6 @@
         <label for="">Address</label>
         <input type="text" name="address" class="form-control" placeholder="enter your address">
     </div>
-    <p>User ID: {{$id}}</p>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
 @endsection

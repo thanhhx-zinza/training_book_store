@@ -27,7 +27,12 @@ class ResigterController extends Controller
         ];
         $user = User::create($formValue);
         Auth::login($user);
-        $request->session()->put('user', ['email' => $user->email]);
-        return redirect()->route('createProfile', $user->id);
+        $profile = Auth::user()->profile;
+        if ($profile == null) {
+            $request->session()->put('user', ['email' => $user->email]);
+            return redirect()->route('createProfile');
+        } else {
+            return redirect("/home");
+        }
     }
 }
