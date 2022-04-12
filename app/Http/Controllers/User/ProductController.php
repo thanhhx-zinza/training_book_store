@@ -41,11 +41,11 @@ class ProductController extends Controller
     public function edit($slug)
     {
         $user = Auth::user();
-        $product = $user->store->product->where('slug',$slug)->first();
+        $product = $user->store->product->where('slug', $slug)->first();
         return view('User.Product.edit_product', compact('product'));
     }
 
-    public function update(UpdateProductRequest $request,$slug)
+    public function update(UpdateProductRequest $request, $slug)
     {
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -68,7 +68,7 @@ class ProductController extends Controller
         return redirect('/admin/store');
     }
 
-    public function delete(Request $request,$slug)
+    public function delete(Request $request, $slug)
     {
         $user = Auth::user();
         $delete = $user->store->product->where('slug', $slug)->first()->delete();

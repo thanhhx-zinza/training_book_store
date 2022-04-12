@@ -20,7 +20,8 @@ class Product extends Model
         'slug',
     ];
 
-    public function store() {
+    public function store()
+    {
         return $this->belongsTo(Store::class);
     }
 }

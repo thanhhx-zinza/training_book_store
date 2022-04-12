@@ -63,7 +63,7 @@ Route::prefix('admin')->middleware('MustBeAuthenticated')->group(function () {
     });
 });
 //client
-Route::get("/", function (){
+Route::get("/", function () {
     $stores = Store::all();
     return view('frontend.store.store', compact('stores'));
 });
