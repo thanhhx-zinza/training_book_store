@@ -13,7 +13,7 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        return view("User.createProfile");
+        return view("User.Profile.createProfile");
     }
 
     public function save(ProfileRequest $request)
