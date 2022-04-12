@@ -30,7 +30,7 @@ class ProfileControllerTest extends TestCase
                 'password' => "02112001",
             ]
         );
-        $response->assertRedirect('/profile');
+        $response->assertRedirect('admin/profile');
     }
 
     public function testSaveProfile()
@@ -54,9 +54,9 @@ class ProfileControllerTest extends TestCase
                 'password' => "02112001",
             ]
         );
-        $response->assertRedirect('/profile');
+        $response->assertRedirect('admin/profile');
         $response = $this->post(
-            '/profile',
+            'admin/profile',
             [
                 'name' => $faker->name,
                 "first_name" => $faker->name,

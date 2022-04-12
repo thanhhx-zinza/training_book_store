@@ -44,7 +44,7 @@ class LoginControllerTest extends TestCase
                 'password' => "02112001",
             ]
         );
-        $response->assertRedirect('/profile');
+        $response->assertRedirect('admin/profile');
     }
 
     public function testLoginFail()
@@ -80,6 +80,6 @@ class LoginControllerTest extends TestCase
                 'password' => 1234,
             ]
         );
-        $response->assertRedirect('/profile');
+        $response->assertRedirect('admin/profile');
     }
 }
