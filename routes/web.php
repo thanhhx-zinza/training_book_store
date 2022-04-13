@@ -37,34 +37,8 @@ Route::post('/login', [LoginController::class, 'login']);
 
 //logout
 Route::delete('/logout', [LogoutController::class, 'logout'])->name('logout');
-
-Route::prefix('admin')->middleware('MustBeAuthenticated')->group(function () {
-//profile
-    Route::prefix('profile')->group(function () {
-        Route::get('/', [ProfileController::class, "show"])->name('createProfile');
-        Route::post('/', [ProfileController::class, "save"])->name("saveProfile");
-    });
-    //store
-    Route::prefix('store')->middleware('MustBeAuthenticated')->group(function () {
-        Route::get('/', [StoreController::class, "index"])->name('home_store');
-        Route::get('/create', [StoreController::class, 'add'])->name('create_store');
-        Route::post('/create', [StoreController::class, 'store'])->name('store_store');
-        Route::get('/edit', [StoreController::class, 'edit'])->name('edit_store');
-        Route::post('/edit', [StoreController::class, 'update'])->name('update_store');
-        Route::delete('/delete', [StoreController::class, 'delete'])->name('delete_store');
-    //product
-        Route::prefix('/product')->group(function () {
-            Route::get('/', [ProductController::class, 'add'])->name('create_product');
-            Route::post('/', [ProductController::class, "store"])->name('store_product');
-            Route::get('/edit/{slug}', [ProductController::class, "edit"])->name('edit_product');
-            Route::post('/edit/{slug}', [ProductController::class, 'update'])->name('update_product');
-            Route::delete('/delete/{slug}', [ProductController::class, 'delete'])->name('delete_product');
-        });
-    });
-});
+//store and book
+Route::resource('profile', ProfileController::class)->middleware('MustBeAuthenticated');
+Route::resource('store', StoreController::class)->middleware('MustBeAuthenticated');
+Route::resource('product', ProductController::class)->middleware('MustBeAuthenticated');
 //client
-Route::get("/", function () {
-    $stores = Store::all();
-    return view('frontend.store.store', compact('stores'));
-});
-Route::get('/stores/{id}', [StoreController::class, 'showDetail'])->name('store_detail');

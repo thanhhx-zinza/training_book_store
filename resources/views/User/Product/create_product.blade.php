@@ -1,7 +1,7 @@
 @extends('layouts.main')
-@section('title', 'tao san pham')
+@section('title', 'create product')
 @section('content')
-<form action="{{route("store_product")}}" method="POST" enctype="multipart/form-data">
+<form action="{{route("product.store")}}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
         <label for="">Name</label>
@@ -31,6 +31,6 @@
             <p class="text-danger">{{$message}}</p>
         @enderror
     </div>
-    <button type="submit" class="btn btn-success" >Tao moi</button>
+    <button type="submit" class="btn btn-success" >Create</button>
 </form>
 @endsection

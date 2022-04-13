@@ -2,9 +2,9 @@
 @section('content')
     <p> Welcome: {{$user->email}} </p>
     @if (!$user->store)
-        <a href="{{route('create_store')}}" class="btn btn-success">Tao cua hang</a>
+        <a href="{{route('store.create')}}" class="btn btn-success">Tao cua hang</a>
     @else
-        <a href="{{route('home_store')}}" class="btn btn-primary">Cua hang</a>
+        <a href="{{route('store.show', $user->store->id)}}" class="btn btn-primary">Cua hang</a>
     @endif
     <form action="{{route('logout')}}" method="post">
         @csrf
@@ -14,7 +14,7 @@
     <p>Danh sach cua hang</p>
         <ul>
             @foreach ($stores as $store)
-            <li><a href="{{route('store_detail',$store->id)}}">{{$store->name}}</a></li>
+            <li><a href="{{route('store.show',$store->id)}}">{{$store->name}}</a></li>
             @endforeach
         </ul>
 @endsection

@@ -24,9 +24,8 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules()
     {
-        $productId = Product::where('slug', $this->slug)->first()->id;
         return [
-            "name" => "required|unique:products,name,".$productId,
+            "name" => "required|unique:products,name,".$this->id,
             "description" => "required",
             'price' => "required|numeric",
             'slug' => "unique:products,slug",

@@ -1,9 +1,11 @@
 @extends('layouts.main')
-@section('title', 'chinh sua san pham')
+@section('title', 'edit product')
 @section('content')
-<form action="{{route("update_product", $product->slug)}}" method="POST" enctype="multipart/form-data">
+<form action="{{route("product.update", $product->id)}}" method="POST" enctype="multipart/form-data">
+    @method("PUT")
     @csrf
     <div class="form-group">
+        <input type="hidden" name="id" value="{{$product->id}}">
         <label for="">Name</label>
         <input type="text" name="name" class="form-control" value="{{$product->name}}">
         @error('name')
@@ -31,6 +33,6 @@
             <p class="text-danger">{{$message}}</p>
         @enderror
     </div>
-    <button type="submit" class="btn btn-success" >Cap nhat</button>
+    <button type="submit" class="btn btn-success" >update</button>
 </form>
 @endsection

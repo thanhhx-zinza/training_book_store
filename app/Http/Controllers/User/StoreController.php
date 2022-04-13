@@ -11,18 +11,33 @@ use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $user = Auth::user();
-        $store = $user->store;
+        $store = $this->currentUser()->store;
         return view('User.Store.index', compact('store'));
     }
 
-    public function add()
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
         return view('User.Store.create_store');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(StoreRequest $request)
     {
         if ($request->hasFile('image')) {
@@ -37,20 +52,45 @@ class StoreController extends Controller
             "description" => $request->description,
             "images" => $name,
         ];
-        $user = Auth::user();
-        $user->store()->create($store);
-        $request->session()->flash('success', "them cua hang thanh cong");
-        return redirect('admin/store');
+
+        $this->currentUser()->store()->create($store);
+        $request->session()->flash('success', "create store successfully");
+        return redirect('/store');
     }
 
-    public function edit()
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $user = Auth::user();
-        $store = $user->store()->first();
+        $store = Store::find($id);
+        $user = $this->currentUser();
+        return view('frontend.store.store_detail', compact('store', 'user'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $store = Store::find($id);
         return view('User.Store.edit_store', compact('store'));
     }
 
-    public function update(UpdateStoreRequest $request)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateStoreRequest $request, $id)
     {
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -58,30 +98,29 @@ class StoreController extends Controller
             $image->storeAs("uploads", $name, "public");
         }
 
-        $store =
+        $storeUpdate =
         [
             "name" => $request->name,
             "description" => $request->description,
             "images" => $name,
         ];
-        $user = Auth::user();
-        $user->store()->update($store);
-        $request->session()->flash('success', "chinh sua cua hang thanh cong");
-        return redirect('admin  /store');
+        $store = Store::find($id);
+        $store->update($storeUpdate);
+        $request->session()->flash('success', "update store success fully");
+        return redirect('/store');
     }
 
-    public function delete(Request $request)
-    {
-        $user = Auth::user();
-        $user->store->delete();
-        $request->session()->flash('success', "xoa thanh cong");
-        return redirect('/home');
-    }
-
-    public function showDetail($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
         $store = Store::find($id);
-        $user = Auth::user();
-        return view('frontend.store.store_detail', compact('store', 'user'));
+        $store->delete();
+        $request->session()->flash('success', "delete store successfully");
+        return redirect('/home');
     }
 }

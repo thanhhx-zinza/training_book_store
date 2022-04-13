@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section("title", "register")
 @section('content')
     <form method="POST" action="/register">
         @csrf

@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-<form action="{{route('saveProfile')}}" method="POST">
+<form action="{{route('profile.store')}}" method="POST">
     @csrf
     <div class="form-group">
         <label for="">Name</label>

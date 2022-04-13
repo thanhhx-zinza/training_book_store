@@ -1,7 +1,8 @@
 @extends('layouts.main')
-@section('title', 'Chinh sua cua hang')
+@section('title', 'edit store')
 @section('content')
-<form action="{{route('update_store')}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('store.update', $store->id)}}" method="POST" enctype="multipart/form-data">
+    @method("PUT")
     @csrf
     <div class="form-group">
         <label for="">Name</label>

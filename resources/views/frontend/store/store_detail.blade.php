@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'cua hang')
+@section('title', 'store')
 @section('content')
 <div class="row">
     <div class="col-md-4">
@@ -10,19 +10,19 @@
             @if ($user && $user->store->id == $store->id)
             <div class="row">
                 <div class="col-md-6">
-                  <a href="{{route('edit_store')}}" class="btn btn-primary">Chinh sua</a>
+                  <a href="{{route('store.edit', $store->id)}}" class="btn btn-primary">Edit</a>
                 </div>
                 <div class="col-md-2">
-                  <form action="{{route('delete_store')}}" method="post" class="form-inline">
+                  <form action="{{route('store.destroy', $store->id)}}" method="post" class="form-inline">
                       @csrf
                       @method('delete')
-                      <button class="btn btn-danger" type="submit">Xoa</button>
+                      <button class="btn btn-danger" type="submit">Delete</button>
                   </form>
                 </div>
 
             </div>
             @else
-                <a href="" class="btn btn-primary" style="width: 100%" >theo doi</a>
+                <a href="" class="btn btn-primary" style="width: 100%" >Follow</a>
             @endif
 
             </div>
@@ -31,23 +31,23 @@
     <div class="col-md-8">
         <div class="row">
             <div class="col-md-6">
-                <p>San pham: {{count($store->product)}} </p>
+                <p>Products: {{count($store->product)}} </p>
             </div>
             <div class="col-md-6">
-                <p>Nguoi theo doi: {{$store->followers}}</p>
+                <p>Followers: {{$store->followers}}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <p>Dang theo doi: {{$store->follow}} </p>
+                <p>Following: {{$store->follow}} </p>
             </div>
             <div class="col-md-6">
-                <p>Danh gia: {{$store->rates}}</p>
+                <p>Rates: {{$store->rates}}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <p>Mo ta: {{$store->description}}</p>
+                <p>Description: {{$store->description}}</p>
             </div>
         </div>
     </div>
@@ -55,20 +55,20 @@
 <div class="row">
     <div class="col-md-12">
         @if ($user && $user->store->id == $store->id)
-        <a href="{{route('create_product')}}" class="btn btn-success">Them moi san pham</a>
+        <a href="{{route('product.create')}}" class="btn btn-success">add product</a>
         @endif
-        <a href="/" class="btn btn-primary">Trang chu</a>
+        <a href="/home" class="btn btn-primary">home</a>
     </div>
 </div>
 <div class="row">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Ten san pham</th>
-                <th>Gia</th>
-                <th>Da ban</th>
-                <th>Hinh anh</th>
-                <th>Tuy chon</th>
+                <th>name</th>
+                <th>price</th>
+                <th>sales</th>
+                <th>image</th>
+                <th>option</th>
             </tr>
         </thead>
         <tbody>
@@ -89,13 +89,13 @@
                     <td>
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="{{route("edit_product",$item->slug)}}" class="btn btn-warning">Sua</a>
+                                <a href="{{route("product.edit",$item->id)}}" class="btn btn-warning">edit</a>
                             </div>
                             <div class="col-md-2">
-                                <form action="{{route('delete_product', $item->slug)}}" method="POST">
+                                <form action="{{route('product.destroy', $item->id)}}" method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button class="btn btn-danger">Xoa</button>
+                                    <button class="btn btn-danger">delete</button>
                                 </form>
                             </div>
                         </div>
