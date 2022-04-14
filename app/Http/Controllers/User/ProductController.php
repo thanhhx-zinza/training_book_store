@@ -59,7 +59,6 @@ class ProductController extends Controller
         } else {
             return redirect('/store')->with('error', 'can not create store');
         }
-
     }
 
     /**
@@ -128,7 +127,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $product = $this->currentUser()->store->products()->find($id);
         if ($product) {

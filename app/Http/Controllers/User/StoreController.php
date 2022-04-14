@@ -58,7 +58,6 @@ class StoreController extends Controller
         } else {
             return redirect('/home')->with('error', 'can not create store');
         }
-
     }
 
     /**
