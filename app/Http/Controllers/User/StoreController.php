@@ -29,7 +29,7 @@ class StoreController extends Controller
      */
     public function create()
     {
-        return view('User.Store.create_store');
+        return view('User.Store.create');
     }
 
     /**
@@ -66,9 +66,13 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        $store = Store::findOrFail($id);
-        $user = $this->currentUser();
-        return view('frontend.store.store_detail', compact('store', 'user'));
+        $store = Store::find($id);
+        if ($store) {
+            $user = $this->currentUser();
+            return view('frontend.store.show', compact('store', 'user'));
+        } else {
+            return redirect('/home')->with('error', 'Store not found');
+        }
     }
 
     /**
@@ -79,11 +83,15 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        if ($this->currentStore()->id == $id) {
+        if ($this->currentUser()->store->id == $id) {
             $store = Store::find($id);
-            return view('User.Store.edit_store', compact('store'));
+            if ($store) {
+                return view('User.Store.edit', compact('store'));
+            } else {
+                return redirect('/home')->with('error', 'Store not found');
+            }
         } else {
-            return redirect('/store')->with('error', 'you dont have permission');
+            return redirect('/store')->with('error', 'you do not have permission');
         }
     }
     /**
@@ -107,10 +115,14 @@ class StoreController extends Controller
             "description" => $request->description,
             "images" => $name,
         ];
-        $store = Store::findOrFail($id);
-        $store->update($storeUpdate);
-        $request->session()->flash('success', "update store success fully");
-        return redirect('/store');
+        $store = Store::find($id);
+        if ($store) {
+            $store->update($storeUpdate);
+            $request->session()->flash('success', "update store successfully");
+            return redirect('/store');
+        } else {
+            return redirect('/home')->with('error', 'Store not found');
+        }
     }
 
     /**
@@ -119,10 +131,14 @@ class StoreController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
-        Store::findOrFail($id)->delete();
-        $request->session()->flash('success', "delete store successfully");
-        return redirect('/home');
+        $store = Store::find($id);
+        if ($store) {
+            $store->delete();
+            return redirect('/home')->with('success', "delete store successfully");
+        } else {
+            return redirect('/home')->with('error', 'Store not found');
+        }
     }
 }
