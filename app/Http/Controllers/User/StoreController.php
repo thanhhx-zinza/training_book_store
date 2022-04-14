@@ -53,9 +53,12 @@ class StoreController extends Controller
             "images" => $name,
         ];
 
-        $this->currentUser()->store()->create($store);
-        $request->session()->flash('success', "create store successfully");
-        return redirect('/store');
+        if ($this->currentUser()->store()->create($store)) {
+            return redirect('/store')->with('success', "create store successfully");
+        } else {
+            return redirect('/home')->with('error', 'can not create store');
+        }
+
     }
 
     /**
@@ -66,7 +69,7 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        $store = Store::find($id);
+        $store = $this->currentUser()->store::find($id);
         if ($store) {
             $user = $this->currentUser();
             return view('frontend.store.show', compact('store', 'user'));
@@ -115,11 +118,13 @@ class StoreController extends Controller
             "description" => $request->description,
             "images" => $name,
         ];
-        $store = Store::find($id);
-        if ($store) {
-            $store->update($storeUpdate);
-            $request->session()->flash('success', "update store successfully");
-            return redirect('/store');
+        if ($this->currentUser()->store->id == $id) {
+            $store = $this->currentUser()->store::find($id);
+            if ($store->update($storeUpdate)) {
+                return redirect('/store')->with('success', "update store successfully");
+            } else {
+                return redirect('/home')->with('error', 'can not update store');
+            }
         } else {
             return redirect('/home')->with('error', 'Store not found');
         }
@@ -133,12 +138,19 @@ class StoreController extends Controller
      */
     public function destroy($id)
     {
-        $store = Store::find($id);
-        if ($store) {
-            $store->delete();
-            return redirect('/home')->with('success', "delete store successfully");
+        if ($this->currentUser()->store->id == $id) {
+            $store = $this->currentUser()->store->find($id);
+            if ($store) {
+                if ($store->delete()) {
+                    return redirect('/home')->with('success', "delete store successfully");
+                } else {
+                    return redirect('/store')->with('error', 'can not delete store');
+                }
+            } else {
+                return redirect('/home')->with('error', 'Store not found');
+            }
         } else {
-            return redirect('/home')->with('error', 'Store not found');
+            return redirect('/home')->with('error', 'you do not have permission to delete');
         }
     }
 }

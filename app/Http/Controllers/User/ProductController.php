@@ -54,9 +54,12 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name),
             "price" => $request->price,
         ];
-        $this->currentUser()->store->products()->create($product);
-        $request->session()->flash('success', "create product successfully");
-        return redirect('/store');
+        if ($this->currentUser()->store->products()->create($product)) {
+            return redirect('/store')->with('success', "create product successfully");
+        } else {
+            return redirect('/store')->with('error', 'can not create store');
+        }
+
     }
 
     /**
@@ -78,19 +81,11 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $arr = [];
-        foreach ($this->currentUser()->store->products as $product) {
-            array_push($arr, $product->id);
-        }
-        if (in_array($id, $arr)) {
-            $product = Product::find($id);
-            if ($product) {
-                return view('User.Product.edit', compact('product'));
-            } else {
-                return redirect('/store')->with('error', 'product not found');
-            }
+        $product = $this->currentUser()->store->products()->find($id);
+        if ($product) {
+            return view('User.Product.edit', compact('product'));
         } else {
-            return redirect('/store')->with('error', 'you do not have permission to edit this product');
+            return redirect('/store')->with('error', 'product not found');
         }
     }
     /**
@@ -115,11 +110,14 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name),
             "price" => $request->price,
         ];
-        $product = Product::find($id);
+        $product = $this->currentUser()->store->products()->find($id);
         if ($product) {
-            $product->update($productUpdate);
-            $request->session()->flash('success', "update product successfully");
-            return redirect('/store');
+            if ($product->update($productUpdate)) {
+                $request->session()->flash('success', "update product successfully");
+                return redirect('/store');
+            } else {
+                return redirect('/store')->with('error', 'can not update product');
+            }
         } else {
             return redirect('/store')->with('error', 'product not found');
         }
@@ -132,11 +130,13 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = $this->currentUser()->store->products()->find($id);
         if ($product) {
-            $product->delete();
-            $request->session()->flash('success', "delete product successfully");
-            return redirect('/store');
+            if ($product->delete()) {
+                return redirect('/store')->with('success', "delete product successfully");
+            } else {
+                return redirect('/store')->with('error', 'can not delete product');
+            }
         } else {
             return redirect('/store')->with('error', 'product not found');
         }
