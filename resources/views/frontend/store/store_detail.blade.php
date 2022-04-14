@@ -31,7 +31,7 @@
     <div class="col-md-8">
         <div class="row">
             <div class="col-md-6">
-                <p>Products: {{count($store->product)}} </p>
+                <p>Products: {{count($store->products)}} </p>
             </div>
             <div class="col-md-6">
                 <p>Followers: {{$store->followers}}</p>
@@ -72,8 +72,8 @@
             </tr>
         </thead>
         <tbody>
-            @if ($store->product)
-                @foreach ($store->product as $item)
+            @if ($store->products)
+                @foreach ($store->products as $item)
                 <tr>
                     <td>{{$item->name}}</td>
                     <td>{{$item->price}}</td>

@@ -27,7 +27,7 @@
     <div class="col-md-8">
         <div class="row">
             <div class="col-md-6">
-                <p>Products: {{count($store->product)}} </p>
+                <p>Products: {{count($store->products)}} </p>
             </div>
             <div class="col-md-6">
                 <p>followers: {{$store->followers}}</p>
@@ -66,8 +66,8 @@
             </tr>
         </thead>
         <tbody>
-            @if ($store->product)
-                @foreach ($store->product as $item)
+            @if ($store->products)
+                @foreach ($store->products as $item)
                 <tr>
                     <td>{{$item->name}}</td>
                     <td>{{$item->price}}</td>
@@ -82,13 +82,14 @@
                     <td>
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="{{route("product.edit",$item->id)}}" class="btn btn-warning">edit</a>
+                                <a href="{{route('product.edit', $item->id)}}" class="btn btn-warning">edit</a>
                             </div>
                             <div class="col-md-2">
                                 <form action="{{route('product.destroy', $item->id)}}" method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button class="btn btn-danger">delete</button>
+                                    <input type="hidden" name="id" value="{{$item->id}}">
+                                    <button class="btn btn-danger" type="submit" >delete</button>
                                 </form>
                             </div>
                         </div>

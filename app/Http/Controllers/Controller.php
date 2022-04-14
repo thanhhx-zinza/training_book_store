@@ -16,4 +16,14 @@ class Controller extends BaseController
     {
         return Auth::user();
     }
+
+    public function currentStore()
+    {
+        return $this->currentUser()->store;
+    }
+
+    public function currentProduct()
+    {
+        return $this->currentStore()->products;
+    }
 }

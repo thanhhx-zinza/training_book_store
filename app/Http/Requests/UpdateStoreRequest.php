@@ -25,7 +25,7 @@ class UpdateStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => "required|unique:stores,name,".Auth::user()->store->id,
+            "name" => "required|unique:stores,name,".$this->id,
             "description" => "required",
             "image" => "required|image|mimes:jpeg,png,jpg,gif,svg|max:2048",
         ];

@@ -66,7 +66,7 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        $store = Store::find($id);
+        $store = Store::findOrFail($id);
         $user = $this->currentUser();
         return view('frontend.store.store_detail', compact('store', 'user'));
     }
@@ -79,10 +79,13 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        $store = Store::find($id);
-        return view('User.Store.edit_store', compact('store'));
+        if ($this->currentStore()->id == $id) {
+            $store = Store::find($id);
+            return view('User.Store.edit_store', compact('store'));
+        } else {
+            return redirect('/store')->with('error', 'you dont have permission');
+        }
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -104,7 +107,7 @@ class StoreController extends Controller
             "description" => $request->description,
             "images" => $name,
         ];
-        $store = Store::find($id);
+        $store = Store::findOrFail($id);
         $store->update($storeUpdate);
         $request->session()->flash('success', "update store success fully");
         return redirect('/store');
@@ -116,10 +119,9 @@ class StoreController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $store = Store::find($id);
-        $store->delete();
+        Store::findOrFail($id)->delete();
         $request->session()->flash('success', "delete store successfully");
         return redirect('/home');
     }

@@ -6,6 +6,7 @@
     @csrf
     <div class="form-group">
         <label for="">Name</label>
+        <input type="hidden" name="id" value="{{$store->id}}">
         <input type="text" name="name"class="form-control" value="{{$store->name}}">
         @error('name')
             <p class="text-danger">{{$message}}</p>

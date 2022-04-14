@@ -54,9 +54,9 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name),
             "price" => $request->price,
         ];
-        $this->currentUser()->store->product()->create($product);
+        $this->currentStore()->products()->create($product);
         $request->session()->flash('success', "create product successfully");
-        return redirect('store');
+        return redirect('/store');
     }
 
     /**
@@ -78,10 +78,17 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::find($id);
-        return view('User.Product.edit_product', compact('product'));
+        $arr = [];
+        foreach ($this->currentProduct() as $product) {
+            array_push($arr, $product->id);
+        }
+        if (in_array($id, $arr)) {
+            $product = Product::findOrFail($id);
+            return view('User.Product.edit_product', compact('product'));
+        } else {
+            return redirect('/store')->with('error', 'you dont have permission to edit this product');
+        }
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -96,7 +103,6 @@ class ProductController extends Controller
             $name = $image->getClientOriginalName();
             $image->storeAs("uploads", $name, "public");
         }
-
         $product =
         [
             "name" => $request->name,
@@ -105,7 +111,7 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name),
             "price" => $request->price,
         ];
-        Product::find($id)->update($product);
+        Product::findOrFail($id)->update($product);
         $request->session()->flash('success', "update product successfully");
         return redirect('/store');
     }
@@ -118,8 +124,7 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $product = Product::find($id);
-        $product->delete();
+        Product::findOrFail($id)->delete();
         $request->session()->flash('success', "delete product successfully");
         return redirect('/store');
     }
