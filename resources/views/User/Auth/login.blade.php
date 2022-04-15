@@ -1,4 +1,5 @@
 @extends('layouts.main')
+@section("title", "login")
 @section('content')
 <form method="POST" action="/login">
     @csrf
@@ -18,9 +19,9 @@
         <label for="exampleInputEmail1" class="form-label">Email address</label>
         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
         <div id="emailHelp" class="form-text">
-            @error('email')
+            {{-- @error('email')
                 <p class="text-danger">{{$message}}</p>
-            @enderror
+            @enderror --}}
         </div>
     </div>
     <div class="mb-3">

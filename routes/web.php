@@ -6,6 +6,10 @@ use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\Auth\LoginController;
 use App\Http\Controllers\User\Auth\LogoutController;
 use App\Http\Controllers\User\Auth\ResigterController;
+use App\Http\Controllers\User\ProductController;
+use App\Http\Controllers\User\StoreController;
+use App\Models\Store;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +21,11 @@ use App\Http\Controllers\User\Auth\ResigterController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/home', function () {
-    return view('home');
-});
+    $user = Auth::user();
+    $stores = Store::all();
+    return view('home', compact('user', 'stores'));
+})->middleware('MustBeAuthenticated')->name('home');
 
 //resigter
 Route::get('/register', [ResigterController::class, 'show']);
@@ -32,9 +37,8 @@ Route::post('/login', [LoginController::class, 'login']);
 
 //logout
 Route::delete('/logout', [LogoutController::class, 'logout'])->name('logout');
-
-//profile
-Route::prefix('profile')->middleware('MustBeAuthenticated')->group(function () {
-    Route::get('/', [ProfileController::class, "show"])->name('createProfile');
-    Route::post('/', [ProfileController::class, "save"])->name("saveProfile");
-});
+//store and book
+Route::resource('profile', ProfileController::class)->middleware('MustBeAuthenticated');
+Route::resource('store', StoreController::class)->middleware('MustBeAuthenticated');
+Route::resource('product', ProductController::class)->middleware('MustBeAuthenticated');
+//client

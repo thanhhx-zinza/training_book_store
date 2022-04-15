@@ -23,9 +23,8 @@ class LoginController extends Controller
         $password = $request->password;
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $request->session()->put('user', ['email' => $email]);
-            $user = Auth::user();
-            if ($user->profile == null) {
-                return redirect()->route('createProfile');
+            if ($this->currentUser()->profile == null) {
+                return redirect()->route('profile.create');
             } else {
                 return redirect("/home");
             }
