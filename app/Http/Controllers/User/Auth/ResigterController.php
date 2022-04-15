@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 
 class ResigterController extends Controller
 {
@@ -20,12 +21,14 @@ class ResigterController extends Controller
 
     public function register(ResigterRequest $request)
     {
+
         $formValue =
         [
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ];
         $user = User::create($formValue);
+        event(new Registered($user));
         Auth::login($user);
         $profile = Auth::user()->profile;
         if ($profile == null) {
