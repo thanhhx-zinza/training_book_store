@@ -29,7 +29,22 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('User.Product.create');
+        $id = request()->id;
+        $quantity = $this->getProduct();
+        if ($this->currentUser()->status == "normal") {
+            if ($quantity < 10) {
+                return view('User.Product.create', ['id' => $id]);
+            } else {
+                return redirect('/home')
+                ->with('error', 'you had created a maximum of products. Please upgrade your account to premium to create more');
+            }
+        } else {
+            if ($quantity < 100) {
+                return view('User.Product.create', ['id' => $id]);
+            } else {
+                return redirect('/home')->with('error', 'you had created a maximum of products');
+            }
+        }
     }
 
     /**
@@ -40,6 +55,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        $storeId = $request->id;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name = $image->getClientOriginalName();
@@ -54,10 +70,28 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name),
             "price" => $request->price,
         ];
-        if ($this->currentUser()->store->products()->create($product)) {
-            return redirect('/store')->with('success', "create product successfully");
+        $quantity = $this->getProduct();
+        if ($this->currentUser()->status == "normal") {
+            if ($quantity < 10) {
+                if ($this->currentUser()->stores()->find($storeId)->products::create($product)) {
+                    return redirect()->route('store.show', $storeId)->with('success', "create product successfully");
+                } else {
+                    return redirect()->route('store.show', $storeId)->with('error', 'can not create product');
+                }
+            } else {
+                return redirect()->route('store.show', $storeId)
+                ->with('error', 'you had created a maximum of products. Please upgrade your account to premium to create more');
+            }
         } else {
-            return redirect('/store')->with('error', 'can not create store');
+            if ($quantity < 100) {
+                if ($this->currentUser()->stores->find($storeId)->products()->create($product)) {
+                    return redirect()->route('store.show', $storeId)->with('success', "create product successfully");
+                } else {
+                    return redirect()->route('store.show', $storeId)->with('error', 'can not create product');
+                }
+            } else {
+                return redirect()->route('store.show', $storeId)->with('error', 'you had created a maximum of products');
+            }
         }
     }
 
@@ -109,7 +143,7 @@ class ProductController extends Controller
             'slug' => Str::slug($request->name),
             "price" => $request->price,
         ];
-        $product = $this->currentUser()->store->products()->find($id);
+        $product = $this->currentUser()->stores->products()->find($id);
         if ($product) {
             if ($product->update($productUpdate)) {
                 $request->session()->flash('success', "update product successfully");
@@ -139,5 +173,16 @@ class ProductController extends Controller
         } else {
             return redirect('/store')->with('error', 'product not found');
         }
+    }
+
+    public function getProduct()
+    {
+        $stores = $this->currentUser()->stores;
+        $product = 0;
+        foreach ($stores as $store) {
+            $products = count($store->products);
+            $product += $products;
+        }
+        return $product;
     }
 }

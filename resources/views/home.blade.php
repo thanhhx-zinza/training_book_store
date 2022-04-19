@@ -11,6 +11,7 @@
         @method('delete')
         <button class="btn btn-danger" type="submit">Log out</button>
     </form>
+    <a href="/stripe">Vip</a>
     <p>Danh sach cua hang</p>
         <ul>
             @foreach ($stores as $store)

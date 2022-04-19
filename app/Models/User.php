@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'email',
         'password',
+        'status',
     ];
 
     /**
@@ -54,8 +55,13 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class, 'user_id');
     }
 
-    public function store()
+    public function stores()
     {
-        return $this->hasOne(Store::class);
+        return $this->hasMany(Store::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
     }
 }

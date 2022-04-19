@@ -8,6 +8,7 @@ use App\Http\Controllers\User\Auth\LogoutController;
 use App\Http\Controllers\User\Auth\ResigterController;
 use App\Http\Controllers\User\ProductController;
 use App\Http\Controllers\User\StoreController;
+use App\Http\Controllers\User\StripeController;
 use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,4 +42,6 @@ Route::delete('/logout', [LogoutController::class, 'logout'])->name('logout');
 Route::resource('profile', ProfileController::class)->middleware('MustBeAuthenticated');
 Route::resource('store', StoreController::class)->middleware('MustBeAuthenticated');
 Route::resource('product', ProductController::class)->middleware('MustBeAuthenticated');
-//client
+//Stripe
+Route::get('/stripe', [StripeController::class, 'stripe']);
+Route::post('/stripe', [StripeController::class, 'stripePost'])->name('stripe.post');

@@ -3,6 +3,7 @@
 @section('content')
 <form action="{{route("product.store")}}" method="POST" enctype="multipart/form-data">
     @csrf
+    <input type="hidden" name="id" value="{{$id}}">
     <div class="form-group">
         <label for="">Name</label>
         <input type="text" name="name" class="form-control" placeholder="enter product name">
