@@ -64,4 +64,16 @@ class User extends Authenticatable
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function totalProductCount()
+    {
+        $storeList = [];
+        $stores = $this->stores->toArray();
+        $storeList = array_map(function ($stores) {
+            return $this->stores->find($stores['id'])->products;
+        }, $stores);
+        return array_sum(array_map(function ($storeList) {
+            return count($storeList);
+        }, $storeList));
+    }
 }

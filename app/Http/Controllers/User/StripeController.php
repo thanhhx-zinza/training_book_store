@@ -26,11 +26,12 @@ class StripeController extends Controller
      */
     public function stripePost(Request $request)
     {
+        $unitNumber = 100;
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $charge = Stripe\Charge::create([
-                "amount" => $request->amount * 100,
-                "currency" => $request->currency,
-                "source" => $request->stripeToken,
+            "amount" => $request->amount * $unitNumber,
+            "currency" => $request->currency,
+            "source" => $request->stripeToken,
         ]);
         if ($charge) {
             $payment =
@@ -45,10 +46,9 @@ class StripeController extends Controller
                 ];
                 if ($this->currentUser()->update($premium)) {
                     return redirect('/home')->with('success', "upgrade account successfully");
-                } else {
-                    return redirect('/home')->with('error', " can not upgrade your account");
                 }
-            };
+                return redirect('/home')->with('error', " can not upgrade your account");
+            }
         }
     }
 }
