@@ -82,10 +82,10 @@
                     <td>
                         <div class="row">
                             <div class="col-md-2">
-                                <a href="{{route('product.edit', $item->id)}}" class="btn btn-warning">edit</a>
+                                <a href="{{route('product.edit', ['product' => $item->id, 'storeId' => $store->id])}}" class="btn btn-warning">edit</a>
                             </div>
                             <div class="col-md-2">
-                                <form action="{{route('product.destroy', $item->id)}}" method="POST">
+                                <form action="{{route('product.destroy', ['product' => $item->id, 'storeId' => $store->id])}}" method="POST">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" name="id" value="{{$item->id}}">

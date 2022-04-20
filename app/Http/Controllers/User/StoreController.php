@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->NORMAL_LIMIT_STORES = 1;
+        $this->PREMIUM_LIMIT_STORES = 3;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,17 +36,14 @@ class StoreController extends Controller
     public function create()
     {
         $stores = $this->currentUser()->stores;
-        if ($this->currentUser()->status == "normal") {
-            if (count($stores) < 1) {
-                return view('User.Store.create');
-            }
+        if ($this->currentUser()->status == "normal" && count($stores) >= $this->NORMAL_LIMIT_STORES) {
             return redirect('/home')
             ->with('error', 'you had created a maximum of stores. Please upgrade your account to premium to create more');
         }
-        if (count($stores) < 3) {
-            return view('User.Store.create');
+        if (count($stores) >= $this->PREMIUM_LIMIT_STORES) {
+            return redirect('/home')->with('error', 'you had created a maximum of stores.');
         }
-        return redirect('/home')->with('error', 'you had created a maximum of stores.');
+        return view('User.Store.create');
     }
 
     /**
@@ -64,23 +67,18 @@ class StoreController extends Controller
             "images" => $name,
         ];
         $stores = $this->currentUser()->stores;
-        if ($this->currentUser()->status == "normal") {
-            if (count($stores) < 1) {
-                if ($this->currentUser()->stores()->create($store)) {
-                    return redirect('/store')->with('success', "create store successfully");
-                }
-                return redirect('/store')->with('error', 'can not create store');
-            }
+        if ($this->currentUser()->status == "normal" && count($stores) >= $this->NORMAL_LIMIT_STORES) {
             return redirect('/home')
             ->with('error', 'you had created a maximum of stores. Please upgrade your account to premium to create more');
         }
-        if (count($stores) < 3) {
-            if ($this->currentUser()->stores()->create($store)) {
-                return redirect('/store')->with('success', "create store successfully");
-            }
-            return redirect('/store')->with('error', 'can not create store');
+        if (count($stores) >= $this->PREMIUM_LIMIT_STORES) {
+            return redirect('/home')
+            ->with('error', 'you had created a maximum of stores');
         }
-        return redirect('/home')->with('error', 'you had created a maximum of stores.');
+        if (!$this->currentUser()->stores()->create($store)) {
+            return redirect('/home')->with('error', 'can not create store');
+        }
+        return redirect('/home')->with('success', 'create store successfully');
     }
 
     /**

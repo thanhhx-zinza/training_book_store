@@ -9,6 +9,10 @@ use Stripe;
 
 class StripeController extends Controller
 {
+    public function __construct()
+    {
+        $this->UNIT_NUMBER = 100;
+    }
     /**
      * Success response method.
      *
@@ -26,10 +30,9 @@ class StripeController extends Controller
      */
     public function stripePost(Request $request)
     {
-        $unitNumber = 100;
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $charge = Stripe\Charge::create([
-            "amount" => $request->amount * $unitNumber,
+            "amount" => $request->amount * $this->UNIT_NUMBER,
             "currency" => $request->currency,
             "source" => $request->stripeToken,
         ]);
