@@ -54,8 +54,10 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        @if ($user && $user->store->id == $store->id)
-        <a href="{{route('product.create')}}" class="btn btn-success">add product</a>
+        @if ($user && $user->store)
+            @if ($user->store->id == $store->id)
+            <a href="{{route('product.create')}}" class="btn btn-success">add product</a>
+            @endif
         @endif
         <a href="/home" class="btn btn-primary">home</a>
     </div>
@@ -85,7 +87,8 @@
                     </td>
                     <td><img src="{{Storage::disk('public')->url($item->images)}}" alt=""
                             style="width: 100px; height:80px"></td>
-                    @if ($user && $user->store->id == $store->id)
+                    @if ($user && $user->store)
+                    @if ($user->store->id == $store->id)
                     <td>
                         <div class="row">
                             <div class="col-md-2">
@@ -100,6 +103,7 @@
                             </div>
                         </div>
                     </td>
+                    @endif
                     @endif
                 </tr>
                 @endforeach

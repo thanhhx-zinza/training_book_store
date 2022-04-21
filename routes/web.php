@@ -11,6 +11,7 @@ use App\Http\Controllers\User\StoreController;
 use App\Http\Controllers\User\StripeController;
 use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +46,15 @@ Route::resource('product', ProductController::class)->middleware('MustBeAuthenti
 //Stripe
 Route::get('/stripe', [StripeController::class, 'stripe']);
 Route::post('/stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
+//verify email
+Route::get('/email/verify', function () {
+    return view('User.Auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/verification-notification', function () {
+    Auth::user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');

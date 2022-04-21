@@ -11,11 +11,11 @@ use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
-
     public function __construct()
     {
         $this->NORMAL_LIMIT_STORES = 1;
         $this->PREMIUM_LIMIT_STORES = 3;
+        $this->middleware(['MustBeAuthenticated', 'verified'])->except('index', 'show');
     }
     /**
      * Display a listing of the resource.

@@ -16,6 +16,7 @@ class ProductController extends Controller
     {
         $this->NORMAL_LIMIT_PRODUCTS = 10;
         $this->PREMIUM_LIMIT_PRODUCTS = 100;
+        $this->middleware(['MustBeAuthenticated', 'verified'])->except('index', 'show');
     }
     /**
      * Display a listing of the resource.
@@ -45,7 +46,7 @@ class ProductController extends Controller
         }
         return view('User.Product.create', ['id' => $id]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
