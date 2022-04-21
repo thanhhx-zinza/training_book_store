@@ -95,7 +95,7 @@
                                 <a href="{{route("product.edit",$item->id)}}" class="btn btn-warning">edit</a>
                             </div>
                             <div class="col-md-2">
-                                <form action="{{route('product.destroy', $item->id)}}" method="POST">
+                                <form action="{{route('product.destroy', ['product' => $item->id, 'storeId' => $store->id])}}" method="POST">
                                     @csrf
                                     @method('delete')
                                     <button class="btn btn-danger">delete</button>

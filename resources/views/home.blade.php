@@ -11,6 +11,11 @@
         @method('delete')
         <button class="btn btn-danger" type="submit">Log out</button>
     </form>
+    <form action="{{route('user.destroy')}}" method="POST">
+        @csrf
+        @method('delete')
+        <button class="btn btn-danger" type="submit">delete account</button>
+    </form>
     <a href="/stripe">Vip</a>
     <p>list store</p>
         <ul>

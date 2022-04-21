@@ -39,6 +39,7 @@ Route::post('/login', [LoginController::class, 'login']);
 
 //logout
 Route::delete('/logout', [LogoutController::class, 'logout'])->name('logout');
+Route::delete('/destroy', [LogoutController::class, 'destroy'])->name('user.destroy');
 //store and book
 Route::resource('profile', ProfileController::class)->middleware('MustBeAuthenticated');
 Route::resource('store', StoreController::class)->middleware('MustBeAuthenticated');

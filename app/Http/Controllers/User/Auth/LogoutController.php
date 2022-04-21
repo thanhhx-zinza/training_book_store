@@ -14,4 +14,13 @@ class LogoutController extends Controller
         session()->forget('user');
         return redirect('/login');
     }
+
+    public function destroy()
+    {
+        $user = $this->currentUser();
+        if ($user->delete()) {
+            return redirect('/home')->with('success', 'delete user success');
+        }
+        return redirect('/home')->with('error', 'can not delete user');
+    }
 }
