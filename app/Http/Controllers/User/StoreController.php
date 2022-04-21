@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->NORMAL_LIMIT_STORES = 1;
+        $this->PREMIUM_LIMIT_STORES = 3;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +24,8 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $store = $this->currentUser()->store;
-        return view('User.Store.index', compact('store'));
+        $stores = $this->currentUser()->stores;
+        return view('User.Store.index', compact('stores'));
     }
 
     /**
@@ -29,6 +35,14 @@ class StoreController extends Controller
      */
     public function create()
     {
+        $stores = $this->currentUser()->stores;
+        if ($this->currentUser()->status == "normal" && count($stores) >= $this->NORMAL_LIMIT_STORES) {
+            return redirect('/home')
+            ->with('error', 'you had created a maximum of stores. Please upgrade your account to premium to create more');
+        }
+        if (count($stores) >= $this->PREMIUM_LIMIT_STORES) {
+            return redirect('/home')->with('error', 'you had created a maximum of stores.');
+        }
         return view('User.Store.create');
     }
 
@@ -52,12 +66,19 @@ class StoreController extends Controller
             "description" => $request->description,
             "images" => $name,
         ];
-
-        if ($this->currentUser()->store()->create($store)) {
-            return redirect('/store')->with('success', "create store successfully");
-        } else {
+        $stores = $this->currentUser()->stores;
+        if ($this->currentUser()->status == "normal" && count($stores) >= $this->NORMAL_LIMIT_STORES) {
+            return redirect('/home')
+            ->with('error', 'you had created a maximum of stores. Please upgrade your account to premium to create more');
+        }
+        if (count($stores) >= $this->PREMIUM_LIMIT_STORES) {
+            return redirect('/home')
+            ->with('error', 'you had created a maximum of stores');
+        }
+        if (!$this->currentUser()->stores()->create($store)) {
             return redirect('/home')->with('error', 'can not create store');
         }
+        return redirect('/home')->with('success', 'create store successfully');
     }
 
     /**
@@ -68,13 +89,12 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        $store = $this->currentUser()->store::find($id);
+        $store = $this->currentUser()->stores->find($id);
         if ($store) {
             $user = $this->currentUser();
-            return view('frontend.store.show', compact('store', 'user'));
-        } else {
-            return redirect('/home')->with('error', 'Store not found');
+            return view('User.Store.show', compact('store', 'user'));
         }
+        return redirect('/home')->with('error', 'Store not found');
     }
 
     /**
@@ -85,16 +105,11 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        if ($this->currentUser()->store->id == $id) {
-            $store = Store::find($id);
-            if ($store) {
-                return view('User.Store.edit', compact('store'));
-            } else {
-                return redirect('/home')->with('error', 'Store not found');
-            }
-        } else {
-            return redirect('/store')->with('error', 'you do not have permission');
+        $store = $this->currentUser()->stores->find($id);
+        if ($store) {
+            return view('User.Store.edit', compact('store'));
         }
+        return redirect('/home')->with('error', 'Store not found');
     }
     /**
      * Update the specified resource in storage.
@@ -117,16 +132,14 @@ class StoreController extends Controller
             "description" => $request->description,
             "images" => $name,
         ];
-        if ($this->currentUser()->store->id == $id) {
-            $store = $this->currentUser()->store::find($id);
+        if ($this->currentUser()->stores->find($id)) {
+            $store = $this->currentUser()->stores->find($id);
             if ($store->update($storeUpdate)) {
                 return redirect('/store')->with('success', "update store successfully");
-            } else {
-                return redirect('/home')->with('error', 'can not update store');
             }
-        } else {
-            return redirect('/home')->with('error', 'Store not found');
+                return redirect('/home')->with('error', 'can not update store');
         }
+            return redirect('/home')->with('error', 'Store not found');
     }
 
     /**
@@ -137,19 +150,16 @@ class StoreController extends Controller
      */
     public function destroy($id)
     {
-        if ($this->currentUser()->store->id == $id) {
-            $store = $this->currentUser()->store->find($id);
+        if ($this->currentUser()->stores->find($id)) {
+            $store = $this->currentUser()->stores->find($id);
             if ($store) {
                 if ($store->delete()) {
                     return redirect('/home')->with('success', "delete store successfully");
-                } else {
-                    return redirect('/store')->with('error', 'can not delete store');
                 }
-            } else {
-                return redirect('/home')->with('error', 'Store not found');
+                    return redirect('/store')->with('error', 'can not delete store');
             }
-        } else {
-            return redirect('/home')->with('error', 'you do not have permission to delete');
+                return redirect('/home')->with('error', 'Store not found');
         }
+            return redirect('/home')->with('error', 'you do not have permission to delete');
     }
 }

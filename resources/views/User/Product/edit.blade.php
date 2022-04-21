@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('title', 'edit product')
 @section('content')
-<form action="{{route("product.update", $product->id)}}" method="POST" enctype="multipart/form-data">
+<form action="{{route("product.update", ['product' => $product->id, 'storeId' => $storeId])}}" method="POST" enctype="multipart/form-data">
     @method("PUT")
     @csrf
     <div class="form-group">

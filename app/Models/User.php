@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'email',
         'password',
+        'status',
     ];
 
     /**
@@ -54,8 +55,25 @@ class User extends Authenticatable
         return $this->hasOne(Profile::class, 'user_id');
     }
 
-    public function store()
+    public function stores()
     {
-        return $this->hasOne(Store::class);
+        return $this->hasMany(Store::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
+    public function totalProductCount()
+    {
+        $storeList = [];
+        $stores = $this->stores->toArray();
+        $storeList = array_map(function ($stores) {
+            return $this->stores->find($stores['id'])->products;
+        }, $stores);
+        return array_sum(array_map(function ($storeList) {
+            return count($storeList);
+        }, $storeList));
     }
 }
