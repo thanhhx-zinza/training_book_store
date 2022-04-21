@@ -68,7 +68,7 @@
                     <div class="row">
                     <div class="col-xs-12">
                         <input type="hidden" name="amount" value="20">
-                        <input type="hidden" name="currency" value="USD">
+                        <input type="hidden" name="currency" value="usd">
                         <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($10)</button>
                     </div>
                     </div>

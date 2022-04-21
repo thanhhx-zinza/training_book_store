@@ -12,6 +12,11 @@ class StripeController extends Controller
     public function __construct()
     {
         $this->UNIT_NUMBER = 100;
+        /* https://stripe.com/docs/currencies#zero-decimal
+        All API requests expect amounts to be provided in a currency’s smallest unit.
+        for example 100 cents = 1$. So UNIT_NUMBER is used to make sure that you pay $
+        not cents
+        */
     }
     /**
      * Success response method.
@@ -33,7 +38,7 @@ class StripeController extends Controller
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $charge = Stripe\Charge::create([
             "amount" => $request->amount * $this->UNIT_NUMBER,
-            "currency" => $request->currency,
+            "currency" => 'usd',
             "source" => $request->stripeToken,
         ]);
         if ($charge) {
