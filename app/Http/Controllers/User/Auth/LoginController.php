@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Models\Profile;
 use App\Models\User;
+use App\Mail\WelcomeMail;
+use Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facade\Hash;
 use Illuminate\Support\Facades\Auth;
