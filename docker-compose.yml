@@ -25,6 +25,7 @@ services:
     links:
       - mysql
       - mailhog
+      - cron
     ports:
       - 8080:8080
     environment:
@@ -41,6 +42,13 @@ services:
     ports:
       - 1025:1025
       - 8025:8025
+  cron:
+    build: ./docker/docker-cron
+    container_name: cron
+    command: crond -f
+    volumes:
+      - .:/app
+      - composer_caches:/app/vendor
 volumes:
   composer_caches:
   mysql-data:

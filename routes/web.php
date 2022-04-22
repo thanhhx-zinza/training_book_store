@@ -35,7 +35,7 @@ Route::post('/register', [ResigterController::class, 'register']);
 
 //login
 Route::get('/login', [LoginController::class, 'show']);
-Route::post('/login', [LoginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 //logout
 Route::delete('/logout', [LogoutController::class, 'logout'])->name('logout');

@@ -2,19 +2,18 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\WelcomeMail;
 use App\Models\User;
-use Mail;
 use Illuminate\Console\Command;
+use Carbon\Carbon;
 
-class WelcomeCommand extends Command
+class RemindEmail extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'welcome:mail';
+    protected $signature = 'mail:remind';
 
     /**
      * The console command description.
@@ -30,9 +29,10 @@ class WelcomeCommand extends Command
      */
     public function handle()
     {
-        $users = User::whereDate('created_at', date('Y-m-d'))->get()->toArray();
-        array_map(function ($users) {
-            return Mail::to($users['email'])->send(new WelcomeMail());
-        }, $users);
+        $sevenDayAgo = Carbon::now()->subDay(7)->toDateString();
+        $users = User::whereDate('created_at', '<=', $sevenDayAgo)->where('email_verified_at', null)->get();
+        foreach ($users as $user) {
+            $user->sendEmailVerificationNotification();
+        }
     }
 }
