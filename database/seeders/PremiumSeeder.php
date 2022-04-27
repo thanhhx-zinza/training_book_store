@@ -17,10 +17,10 @@ class PremiumSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->where('status', 'premium')->orderBy('id', 'asc')->chunk(500, function($users) {
+        DB::table('users')->where('status', 'premium')->orderBy('id', 'desc')->chunk(500, function($users) {
             $faker = Factory::create();
             foreach ($users as $user) {
-                for ($i = 1; $i <=  rand(1, 3); $i++) {
+                for ($i = 1; $i <= rand(1, 3); $i++) {
                     $stores[] = [
                         'name' => $faker->unique()->words(2, true),
                         'description' => $faker->paragraphs(2, true),

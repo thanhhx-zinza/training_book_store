@@ -20,7 +20,7 @@ class NormalSeeder extends Seeder
     public function run()
     {
 
-        DB::table('users')->where('status', 'normal')->orderBy('id', 'asc')->chunk(400, function($users) {
+        DB::table('users')->where('status', 'normal')->where('email_verified_at', '!=', 'null')->orderBy('id', 'desc')->chunk(400, function($users) {
             $faker = Factory::create();
             foreach ($users as $user) {
                 $stores[] = [
@@ -35,7 +35,7 @@ class NormalSeeder extends Seeder
             }
             DB::table('stores')->upsert($stores, ['id']);
         });
-        DB::table('stores')->orderBy('id', 'asc')->limit(400)->get()->each(function($store) {
+        DB::table('stores')->orderBy('id', 'desc')->limit(400)->get()->each(function($store) {
             $faker = Factory::create();
             $name = $faker->word(5, true);
             for ($i = 1; $i <= rand(1, 10); $i++) {

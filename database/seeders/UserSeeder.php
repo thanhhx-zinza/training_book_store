@@ -20,11 +20,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $unVeriUsers = User::factory()->count(100)->unverified()->make();
-        $veriUsers = User::factory()->count(400)-> make();
+        $unVerifyUsers = User::factory()->count(100)->unverified()->make();
+        $verifyUsers = User::factory()->count(400)-> make();
         $premiumUsers = User::factory()->count(500)->premium()->make();
-        DB::table('users')->upsert($veriUsers->toArray(), ['id']);
-        DB::table('users')->upsert($unVeriUsers->toArray(), ['id']);
+        DB::table('users')->upsert($unVerifyUsers->toArray(), ['id']);
+        DB::table('users')->upsert($verifyUsers->toArray(), ['id']);
         DB::table('users')->upsert($premiumUsers->toArray(), ['id']);
     }
 }
