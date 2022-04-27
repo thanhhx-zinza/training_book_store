@@ -4,14 +4,15 @@ namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Models\Profile;
+use App\Mail\RemindCreateStoreMail;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facade\Hash;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Mail;
 
 class LoginController extends Controller
 {
+
     public function show()
     {
         return view("User.Auth.login");

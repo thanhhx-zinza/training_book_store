@@ -2,11 +2,19 @@
 
 namespace App\Console;
 
+use App\Console\Commands\RemindCreateStore;
+use App\Console\Commands\RemindEmail;
+use App\Console\Commands\WelcomeCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commnands = [
+        WelcomeCommand::class,
+        RemindEmail::class,
+        RemindCreateStore::class,
+    ];
     /**
      * Define the application's command schedule.
      *
@@ -15,7 +23,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('welcome:mail')->daily()->withoutOverlapping();
+        $schedule->command('mail:remind')->daily()->withoutOverlapping();
+        $schedule->command('store:remind')->daily()->withoutOverlapping();
     }
 
     /**
