@@ -151,7 +151,8 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = $this->currentUser()->store->products()->find($id);
+        $storeId = request()->storeId;
+        $product = $this->currentUser()->stores()->find($storeId)->products()->find($id);
         if ($product) {
             if ($product->delete()) {
                 return redirect('/store')->with('success', "delete product successfully");
