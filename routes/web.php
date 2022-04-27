@@ -27,7 +27,7 @@ Route::get('/home', function () {
     $user = Auth::user();
     $stores = Store::all();
     return view('home', compact('user', 'stores'));
-})->middleware('MustBeAuthenticated')->name('home');
+})->middleware('auth')->name('home');
 
 //resigter
 Route::get('/register', [ResigterController::class, 'show']);

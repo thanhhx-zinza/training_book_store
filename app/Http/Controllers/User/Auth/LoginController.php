@@ -12,7 +12,6 @@ use Mail;
 
 class LoginController extends Controller
 {
-
     public function show()
     {
         return view("User.Auth.login");
@@ -35,3 +34,5 @@ class LoginController extends Controller
         }
     }
 }
+//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8wLjAuMC4wOjgwODBcL2FwaVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2NTEwNDEyMDEsImV4cCI6MTY1MTA0NDgwMSwibmJmIjoxNjUxMDQxMjAxLCJqdGkiOiJ6VTNIUENOellYdFozQUJpIiwic3ViIjoxMDAwLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.QWEFNlIHj3O-e7Ba3IgGZ5R7gnoIbkkmVUuUHyKvm88
+//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8wLjAuMC4wOjgwODBcL2xvZ2luIiwiaWF0IjoxNjUxMDQxMjczLCJleHAiOjE2NTEwNDQ4NzMsIm5iZiI6MTY1MTA0MTI3MywianRpIjoiWmpPa3d3RmZ1TEd4N21QayIsInN1YiI6MTAxNiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.dwv3FHPZGLPe5YKXJrQgzCwNVVdCjlEtlIfx1hwETdc
