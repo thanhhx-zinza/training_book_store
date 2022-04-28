@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-<form action="{{route('profile.store')}}" method="POST">
+<form action="{{route('profile.store')}}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
         <label for="">Name</label>
@@ -32,6 +32,10 @@
     <div class="form-group">
         <label for="">Address</label>
         <input type="text" name="address" class="form-control" placeholder="enter your address">
+    </div>
+    <div class="form-group">
+        <label for="">Avatar</label>
+        <input type="file" name="avatar" class="form-control">
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
