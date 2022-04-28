@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileControllerTest extends TestCase
 {
@@ -56,9 +57,12 @@ class ProfileControllerTest extends TestCase
             ]
         );
         $response->assertRedirect('profile/create');
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
         $response = $this->post(
-            'profile',
+            '/profile',
             [
+                '_token' => csrf_token(),
                 'name' => $faker->name,
                 "first_name" => $faker->name,
                 "last_name" => $faker->name,
@@ -66,10 +70,9 @@ class ProfileControllerTest extends TestCase
                 'phone_number' => $faker->phoneNumber,
                 "gender" => $faker->randomElement(['male', 'female']),
                 "address" => $faker->name,
-                'avatar' => $_FILES,
-            ]);
-        $this->markTestIncomplete('avatar upload incomplete');
-        $response->assertRedirect("/home");
-
+                'avatar' => $file,
+            ]
+        );
+        $response->assertRedirect('/home');
     }
 }
