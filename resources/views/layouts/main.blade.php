@@ -27,7 +27,7 @@
             });
             var formData = new FormData(this);
             $.ajax({
-                url: "http://0.0.0.0:8080/profile/"+id,
+                url: $(this).attr('action'),
                 type: 'POST',
                 processData: false,
                 contentType: false,
