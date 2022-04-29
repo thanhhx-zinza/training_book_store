@@ -37,6 +37,10 @@ class ProfileController extends Controller
      */
     public function store(ProfileRequest $request)
     {
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $avatar->storeAs('avatar', $avatar->getClientOriginalName(), 'avatar');
+        }
         $formValue = [
             'name' => $request->name,
             "first_name" => $request->first_name,
@@ -45,6 +49,7 @@ class ProfileController extends Controller
             'phone_number' => $request->phone_number,
             "gender" => $request->gender,
             "address" => $request->address,
+            'avatar' => $avatar->getClientOriginalName(),
         ];
         $this->currentUser()->profile()->create($formValue);
         return redirect("/home")->with('success', 'create profile successfully');
@@ -67,9 +72,10 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
-        //
+        $profile = $this->currentUser()->profile;
+        return view('User.Profile.edit', compact($profile));
     }
 
     /**
@@ -79,9 +85,33 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProfileRequest $request)
     {
-        //
+        if ($request->avatar) {
+            $avatar = $request->avatar;
+            $avatar->storeAs('uploads', $avatar->getClientOriginalName(), 'public');
+        }
+        $formValue = [
+            'name' => $request->name,
+            "first_name" => $request->first_name,
+            "last_name" => $request->last_name,
+            "dob" => $request->dob,
+            'phone_number' => $request->phone_number,
+            "gender" => $request->gender,
+            "address" => $request->address,
+            'avatar' => $avatar->getClientOriginalName(),
+        ];
+        if ($this->currentUser()->profile()->update($formValue)) {
+            return response()->json([
+                'status' => 200,
+                'message' => "success",
+            ]);
+        }
+        return response()->json(
+            [
+                'message' => "error",
+            ]
+        );
     }
 
     /**
