@@ -9,9 +9,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
@@ -43,6 +44,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [];
 
     protected $table = "users";
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     /**
      * Get the profile associated with the User

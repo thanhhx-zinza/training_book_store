@@ -12,7 +12,6 @@ use Mail;
 
 class LoginController extends Controller
 {
-
     public function show()
     {
         return view("User.Auth.login");
