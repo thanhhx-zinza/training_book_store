@@ -4,7 +4,6 @@ namespace Tests\Unit\Http\Controllers\User\Auth;
 
 use App\Models\User;
 use Tests\TestCase;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LogoutControllerTest extends TestCase
@@ -17,10 +16,7 @@ class LogoutControllerTest extends TestCase
      */
     public function testLogout()
     {
-        Session::start();
-        $user = User::first();
-        $this->be($user);
-        $response = $this->delete('/logout', ['_token' => csrf_token()]);
+        $response = $this->delete('/logout');
         $response->assertRedirect('/login');
     }
 }
