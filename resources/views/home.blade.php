@@ -5,7 +5,7 @@
     @if ($user)
     <!-- Button trigger modal -->
     <div>
-        <img class="thumbnail img-responsive" src="{{Storage::disk('public')->url($user->profile ? $user->profile->avatar : "")}}" alt=""  data-toggle="modal" data-target="#exampleModal" >
+        <img class="thumbnail img-responsive" src="{{Storage::disk('public')->url($user->profile ? $user->profile->avatar : "")}}" alt="this is avatar"  data-toggle="modal" data-target="#exampleModal" >
     </div>
         @include('components.profile_component')
         @include('components.update_profile_component')
