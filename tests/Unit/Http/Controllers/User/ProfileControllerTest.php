@@ -64,7 +64,7 @@ class ProfileControllerTest extends TestCase
         $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
         if ($user->profile) {
             $response = $this->post(
-                '/profile/49',
+                '/profile/'.$user->profile->id,
                 [
                     '_method' => 'PUT',
                     '_token' => csrf_token(),
@@ -79,22 +79,6 @@ class ProfileControllerTest extends TestCase
                 ]
             );
             $response->assertJson(['status' => 200, 'message' => 'success']);
-        } else {
-            $response = $this->put(
-            '/profile/ ',
-                [
-                    '_token' => csrf_token(),
-                    'name' => $faker->name,
-                    "first_name" => $faker->name,
-                    "last_name" => $faker->name,
-                    "dob" => $faker->date('Y-m-d'),
-                    'phone_number' => $faker->phoneNumber,
-                    "gender" => $faker->randomElement(['male', 'female']),
-                    "address" => $faker->name,
-                    'avatar' => $file,
-                ]
-            );
-            $response->assertStatus(405);
         }
     }
 }

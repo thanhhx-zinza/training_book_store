@@ -27,7 +27,7 @@ class ProfileSeeder extends Seeder
                 'phone_number' => $faker->phoneNumber,
                 'gender' => $faker->randomElement($array = array ('male', 'female')),
                 'address' => $faker->city,
-                'user_id' => User::orderBy('id', 'DESC')->first()->id,
+                'user_id' => User::first()->id,
                 'created_at' => $faker->date('Y-m-d H:i:s'),
             ]
         );
