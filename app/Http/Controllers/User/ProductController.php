@@ -9,7 +9,6 @@ use App\Jobs\updateTotalProductCount;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {

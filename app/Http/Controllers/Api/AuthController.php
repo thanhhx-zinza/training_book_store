@@ -13,7 +13,7 @@ class AuthController extends ApiBaseController
     {
         $token = $this->auth()->attempt(['email' => $request->email, 'password' => $request->password]);
         if (!$token) {
-            return $this->response->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
         if ($this->currentUser()->profile == null) {
             Profile::create([
