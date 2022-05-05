@@ -23,40 +23,18 @@ class ProfileControllerTest extends TestCase
     public function testProfileUrl()
     {
         Session::start();
-        $faker = Factory::create();
-        $response = $this->post(
-            'register',
-            [
-                '_token' => csrf_token(),
-                'email' => $faker->email,
-                'password' => "02112001",
-            ]
-        );
-        $response->assertRedirect('profile/create');
+        $user = User::first();
+        $this->be($user);
+        $response = $this->get('/profile/create');
+        $response->assertViewIs("User.Profile.createProfile");
     }
 
     public function testSaveProfile()
     {
         Session::start();
+        $user = User::first();
+        $this->be($user);
         $faker = Factory::create();
-        $response = $this->post(
-            'register',
-            [
-                '_token' => csrf_token(),
-                'email' => $faker->email,
-                'password' => "02112001",
-            ]
-        );
-        $user = User::orderBy('id', 'DESC')->first();
-        $response = $this->post(
-            '/login',
-            [
-                '_token' => csrf_token(),
-                'email' => $user->email,
-                'password' => "02112001",
-            ]
-        );
-        $response->assertRedirect('profile/create');
         Storage::fake('public');
         $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
         $response = $this->post(
@@ -74,5 +52,33 @@ class ProfileControllerTest extends TestCase
             ]
         );
         $response->assertRedirect('/home');
+    }
+
+    public function testUpdateProfile()
+    {
+        Session::start();
+        $user = User::first();
+        $this->be($user);
+        $faker = Factory::create();
+        Storage::fake('public');
+        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
+        if ($user->profile) {
+            $response = $this->post(
+                '/profile/'.$user->profile->id,
+                [
+                    '_method' => 'PUT',
+                    '_token' => csrf_token(),
+                    'name' => $faker->name,
+                    "first_name" => $faker->name,
+                    "last_name" => $faker->name,
+                    "dob" => $faker->date('Y-m-d'),
+                    'phone_number' => $faker->phoneNumber,
+                    "gender" => $faker->randomElement(['male', 'female']),
+                    "address" => $faker->name,
+                    'avatar' => $file,
+                ]
+            );
+            $response->assertJson(['status' => 200, 'message' => 'success']);
+        }
     }
 }

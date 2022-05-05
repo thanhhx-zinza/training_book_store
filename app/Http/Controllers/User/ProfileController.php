@@ -74,8 +74,7 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        $profile = $this->currentUser()->profile;
-        return view('User.Profile.edit', compact($profile));
+        //
     }
 
     /**

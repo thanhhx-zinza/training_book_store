@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             NormalSeeder::class,
             PremiumSeeder::class,
+            ProfileSeeder::class,
         ]);
     }
 }
