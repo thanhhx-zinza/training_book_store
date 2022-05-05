@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Jobs\updateTotalProductCount;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -79,6 +80,8 @@ class ProductController extends Controller
             return redirect()->route('store.show', $storeId)->with('error', 'you had created a maximum of products');
         }
         if ($this->currentUser()->stores->find($storeId)->products()->create($product)) {
+            $totalProduct = $this->currentUser()->total_product_count + 1;
+            updateTotalProductCount::dispatch($totalProduct);
             return redirect()->route('store.show', $storeId)->with('success', "create product successfully");
         }
         return redirect()->route('store.show', $storeId)->with('error', 'can not create product');
@@ -155,6 +158,8 @@ class ProductController extends Controller
         $product = $this->currentUser()->stores()->find($storeId)->products()->find($id);
         if ($product) {
             if ($product->delete()) {
+                $totalProduct = $this->currentUser()->total_product_count - 1;
+                updateTotalProductCount::dispatch($totalProduct);
                 return redirect('/store')->with('success', "delete product successfully");
             }
             return redirect('/store')->with('error', 'can not delete product');
