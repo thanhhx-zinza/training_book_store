@@ -30,4 +30,14 @@ class Store extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function ($store) {
+            $store->products->each(function ($product) {
+                $product->delete();
+            });
+        });
+    }
 }

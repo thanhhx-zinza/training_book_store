@@ -156,10 +156,6 @@ class StoreController extends Controller
             $store = $this->currentUser()->stores->find($id);
             if ($store) {
                 if ($store->delete()) {
-                    $products = Product::where('store_id', $store->id)->get();
-                    Product::where('store_id', $store->id)->delete();
-                    $totalProduct = $this->currentUser()->total_product_count - count($products);
-                    updateTotalProductCount::dispatch($totalProduct);
                     return redirect('/home')->with('success', "delete store successfully");
                 }
                     return redirect('/store')->with('error', 'can not delete store');
