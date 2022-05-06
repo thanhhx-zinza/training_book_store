@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateStoreRequest;
+use App\Jobs\updateTotalProductCount;
+use App\Models\Product;
 use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;

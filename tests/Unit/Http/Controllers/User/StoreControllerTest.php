@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class StoreControllerTest extends TestCase
 {
     use DatabaseTransactions;
-
+  
     public function testIndexStore()
     {
         Session::start();
