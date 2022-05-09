@@ -17,7 +17,7 @@ class StoreControllerTest extends TestCase
     public function testIndexStore()
     {
         Session::start();
-        $user = User::NormalUser()->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $response = $this->get('/store');
         $response->assertViewIs('User.Store.index');
@@ -26,7 +26,7 @@ class StoreControllerTest extends TestCase
     public function testCreateStore()
     {
         Session::start();
-        $users = User::PremiumUser();
+        $users = User::Premium()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) < 3) {
                 $this->be($user);
@@ -40,7 +40,7 @@ class StoreControllerTest extends TestCase
     public function testCreateStoreFail()
     {
         Session::start();
-        $users = User::NormalUser();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) >= 1) {
                 $this->be($user);
@@ -49,7 +49,7 @@ class StoreControllerTest extends TestCase
                 break;
             }
         }
-        $premiumUsers = User::PremiumUser();
+        $premiumUsers = User::Premium()->Verified();
         foreach ($premiumUsers as $premiumUser) {
             if (count($premiumUser->stores) >= 3) {
                 $this->be($premiumUser);
@@ -64,7 +64,7 @@ class StoreControllerTest extends TestCase
     {
         Session::start();
         $faker = Factory::create();
-        $users = User::NormalUser();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) < 1) {
                 $this->be($user);
@@ -80,7 +80,7 @@ class StoreControllerTest extends TestCase
                 break;
             }
         }
-        $premiumUsers = User::PremiumUser();
+        $premiumUsers = User::Premium()->Verified();
         foreach ($premiumUsers as $premiumUser) {
             if (count($premiumUser->stores) < 3) {
                 $this->be($premiumUser);
@@ -102,7 +102,7 @@ class StoreControllerTest extends TestCase
     {
         Session::start();
         $faker = Factory::create();
-        $users = User::NormalUser();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) >= 1) {
                 $this->be($user);
@@ -119,7 +119,7 @@ class StoreControllerTest extends TestCase
                 break;
             }
         }
-        $premiumUsers = User::PremiumUser();
+        $premiumUsers = User::Premium()->Verified();
         foreach ($premiumUsers as $premiumUser) {
             if (count($premiumUser->stores) >= 3) {
                 $this->be($premiumUser);
@@ -141,7 +141,7 @@ class StoreControllerTest extends TestCase
     public function testShowStore()
     {
         Session::start();
-        $user = User::NormalUser()->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $response = $this->get('/store/'.$user->stores->first()->id);
         $response->assertViewIs('User.Store.show');
@@ -150,7 +150,7 @@ class StoreControllerTest extends TestCase
     public function testEditStore()
     {
         Session::start();
-        $user = User::NormalUser()->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $response = $this->get('/store/'.$user->stores->first()->id.'/edit');
         $response->assertViewIs('User.Store.edit');
@@ -160,7 +160,7 @@ class StoreControllerTest extends TestCase
     {
         Session::start();
         $faker = Factory::create();
-        $users = User::NormalUser();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) <= 1) {
                 $this->be($user);
@@ -176,7 +176,7 @@ class StoreControllerTest extends TestCase
                 break;
             }
         }
-        $premiumUsers = User::PremiumUser();
+        $premiumUsers = User::Premium()->Verified();
         foreach ($premiumUsers as $premiumUser) {
             if (count($premiumUser->stores) <= 3) {
                 $this->be($premiumUser);
@@ -200,7 +200,7 @@ class StoreControllerTest extends TestCase
     public function testDestroyStore()
     {
         Session::start();
-        $user = User::NormalUser()->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $response = $this->delete('/store/'.$user->stores->first()->id);
         $response->assertRedirect('/home');

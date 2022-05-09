@@ -18,7 +18,7 @@ class ProductControllerTest extends TestCase
     public function testCreateProduct()
     {
         Session::start();
-        $user = User::NormalUser();
+        $user = User::Normal()->Verified();
         foreach ($user as $user) {
             if ($user->totalProductCount() < 10) {
                 $this->be($user);
@@ -34,7 +34,7 @@ class ProductControllerTest extends TestCase
     public function testCreateProductFail()
     {
         Session::start();
-        $users = User::NormalUser();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if ($user->totalProductCount() >= 10) {
                 $this->be($user);
@@ -50,7 +50,7 @@ class ProductControllerTest extends TestCase
     public function testStoreProduct()
     {
         Session::start();
-        $users = User::NormalUser();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if ($user->totalProductCount() < 10) {
                 $this->be($user);
@@ -82,7 +82,7 @@ class ProductControllerTest extends TestCase
         Session::start();
         $faker = Factory::create();
         $productName = $faker->name;
-        $users = User::NormalUser();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if ($user->totalProductCount() >= 9) {
                 $this->be($user);
@@ -107,7 +107,7 @@ class ProductControllerTest extends TestCase
     public function testEditProduct()
     {
         Session::start();
-        $user = User::NormalUser()->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $storeId = $user->stores->first()->id;
         $product = $user->stores->first()->products->first();
@@ -120,7 +120,7 @@ class ProductControllerTest extends TestCase
     public function testUpdateProduct()
     {
         Session::start();
-        $user = User::NormalUser()->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
             $product = $user->stores->first()->products->first();
             $faker = Factory::create();
@@ -143,7 +143,7 @@ class ProductControllerTest extends TestCase
     public function testDestroyProduct()
     {
         Session::start();
-        $user = User::NormalUser()->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
             $product = $user->stores->first()->products->first();
             $response = $this->delete(
