@@ -35,8 +35,6 @@ class ProfileControllerTest extends TestCase
         $user = User::first();
         $this->be($user);
         $faker = Factory::create();
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
         $response = $this->post(
             '/profile',
             [
@@ -48,7 +46,7 @@ class ProfileControllerTest extends TestCase
                 'phone_number' => $faker->phoneNumber,
                 "gender" => $faker->randomElement(['male', 'female']),
                 "address" => $faker->name,
-                'avatar' => $file,
+                'avatar' => $this->uploadFile(),
             ]
         );
         $response->assertRedirect('/home');
@@ -60,8 +58,6 @@ class ProfileControllerTest extends TestCase
         $user = User::first();
         $this->be($user);
         $faker = Factory::create();
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
         if ($user->profile) {
             $response = $this->post(
                 '/profile/'.$user->profile->id,
@@ -75,7 +71,7 @@ class ProfileControllerTest extends TestCase
                     'phone_number' => $faker->phoneNumber,
                     "gender" => $faker->randomElement(['male', 'female']),
                     "address" => $faker->name,
-                    'avatar' => $file,
+                    'avatar' => $this->uploadFile(),
                 ]
             );
             $response->assertJson(['status' => 200, 'message' => 'success']);

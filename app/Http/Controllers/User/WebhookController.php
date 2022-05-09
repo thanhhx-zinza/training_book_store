@@ -13,13 +13,22 @@ class WebhookController extends Controller
     {
         $payload = json_decode($request->getContent(), true);
         $method = str_replace('.', '_', $payload['type']);
-        $payment = Payment::where('charge_id', $payload['data']['object']['id'])->first();
+        if (array_key_exists('data', $payload) && array_key_exists('object', $payload['data'])) {
+            $payloadObject = $payload['data']['object'];
+        } else {
+            $payloadObject = [];
+        }
+        if (array_key_exists('id', $payloadObject)) {
+            $payment = Payment::where('charge_id', $payloadObject['id'])->first();
+        } else {
+            $payment = null;
+        }
         Webhook::create(
             [
                 'event' => $method,
-                'payload_id' => $payload['id'],
-                'user_id' => $payment->user_id,
-                'amount (cent)' => $payload['data']['object']['amount'],
+                'payload_id' => array_key_exists('id', $payload) ? $payload['id'] : null,
+                'user_id' => $payment != null ? $payment->user_id : null,
+                'amount (cent)' => array_key_exists('amount', $payloadObject) ? $payloadObject['amount'] : null,
             ]
         );
     }

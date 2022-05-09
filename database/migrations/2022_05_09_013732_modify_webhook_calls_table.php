@@ -17,7 +17,7 @@ class ModifyWebhookCallsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->renameColumn('name', 'event');
             $table->renameColumn('payload', 'payload_id');
-            $table->double('amount (cent)', 15, 8);
+            $table->double('amount_cent', 15, 8);
         });
     }
 

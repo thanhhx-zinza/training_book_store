@@ -16,6 +16,6 @@ class Webhook extends Model
         'payload_id',
         'exception',
         'user_id',
-        'amount (cent)',
+        'amount_cent',
     ];
 }
