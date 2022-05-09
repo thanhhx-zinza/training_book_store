@@ -9,11 +9,12 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class StoreControllerTest extends TestCase
 {
     use DatabaseTransactions;
-  
+
     public function testIndexStore()
     {
         Session::start();
@@ -26,7 +27,7 @@ class StoreControllerTest extends TestCase
     public function testCreateStore()
     {
         Session::start();
-        $users = User::where('status', 'premium')->get();
+        $users = User::where('status', 'premium')->where('email_verified_at', '!=', null)->get();
         foreach ($users as $user) {
             if (count($user->stores) < 3) {
                 $this->be($user);

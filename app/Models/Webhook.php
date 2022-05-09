@@ -12,8 +12,10 @@ class Webhook extends Model
     protected $table = "webhook_calls";
     protected $fillable =
     [
-        'name',
-        'payload',
+        'event',
+        'payload_id',
         'exception',
+        'user_id',
+        'amount (cent)',
     ];
 }
