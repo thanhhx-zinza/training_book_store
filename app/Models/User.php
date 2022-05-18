@@ -87,4 +87,19 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
             return count($storeList);
         }, $storeList));
     }
+
+    public function scopePremium($query)
+    {
+        return $query->where('status', 'premium');
+    }
+
+    public function scopeNormal($query)
+    {
+        return $query->where('status', 'normal');
+    }
+
+    public function scopeVerified($query)
+    {
+        return $query->where('email_verified_at', '!=', null)->get();
+    }
 }

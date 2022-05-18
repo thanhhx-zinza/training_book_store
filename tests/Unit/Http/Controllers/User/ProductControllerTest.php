@@ -18,7 +18,7 @@ class ProductControllerTest extends TestCase
     public function testCreateProduct()
     {
         Session::start();
-        $user = User::where('status', 'normal')->where('email_verified_at', '!=', null)->get();
+        $user = User::Normal()->Verified();
         foreach ($user as $user) {
             if ($user->totalProductCount() < 10) {
                 $this->be($user);
@@ -34,7 +34,7 @@ class ProductControllerTest extends TestCase
     public function testCreateProductFail()
     {
         Session::start();
-        $users = User::where('status', 'normal')->where('email_verified_at', '!=', null)->get();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if ($user->totalProductCount() >= 10) {
                 $this->be($user);
@@ -50,22 +50,20 @@ class ProductControllerTest extends TestCase
     public function testStoreProduct()
     {
         Session::start();
-        $users = User::where('status', 'normal')->where('email_verified_at', '!=', null)->get();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if ($user->totalProductCount() < 10) {
                 $this->be($user);
                 foreach ($user->stores as $store) {
                     $faker = Factory::create();
                     $productName = $faker->name;
-                    Storage::fake('public');
-                    $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
                     $response = $this->post(
                         '/product',
                         [
                             "_token" => csrf_token(),
                             "name" => $productName,
                             "description" => $faker->text(),
-                            "image" => $file,
+                            "image" => $this->uploadFile(),
                             'slug' => Str::slug($productName),
                             "price" => $faker->randomNumber(3, false),
                             'id' => $store->id,
@@ -84,9 +82,7 @@ class ProductControllerTest extends TestCase
         Session::start();
         $faker = Factory::create();
         $productName = $faker->name;
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
-        $users = User::where('status', 'normal')->where('email_verified_at', '!=', null)->get();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if ($user->totalProductCount() >= 9) {
                 $this->be($user);
@@ -96,7 +92,7 @@ class ProductControllerTest extends TestCase
                         "_token" => csrf_token(),
                         "name" => $productName,
                         "description" => $faker->text(),
-                        "image" => $file,
+                        "image" => $this->uploadFile(),
                         'slug' => Str::slug($productName),
                         "price" => $faker->randomNumber(3, false),
                         'id' => $user->stores->first()->id,
@@ -111,7 +107,7 @@ class ProductControllerTest extends TestCase
     public function testEditProduct()
     {
         Session::start();
-        $user = User::where('status', 'normal')->where('email_verified_at', '!=', null)->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $storeId = $user->stores->first()->id;
         $product = $user->stores->first()->products->first();
@@ -124,20 +120,18 @@ class ProductControllerTest extends TestCase
     public function testUpdateProduct()
     {
         Session::start();
-        $user = User::where('status', 'normal')->where('email_verified_at', '!=', null)->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
             $product = $user->stores->first()->products->first();
             $faker = Factory::create();
             $productName = $faker->name;
-            Storage::fake('public');
-            $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
             $response = $this->put(
                 '/product/'.$product->id,
                 [
                     "_token" => csrf_token(),
                     "name" => $productName,
                     "description" => $faker->text(),
-                    "image" => $file,
+                    "image" => $this->uploadFile(),
                     'slug' => Str::slug($productName),
                     "price" => $faker->randomNumber(3, false),
                     'storeId' => $user->stores->first()->id,
@@ -149,7 +143,7 @@ class ProductControllerTest extends TestCase
     public function testDestroyProduct()
     {
         Session::start();
-        $user = User::where('status', 'normal')->where('email_verified_at', '!=', null)->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
             $product = $user->stores->first()->products->first();
             $response = $this->delete(

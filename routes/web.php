@@ -9,6 +9,7 @@ use App\Http\Controllers\User\Auth\ResigterController;
 use App\Http\Controllers\User\ProductController;
 use App\Http\Controllers\User\StoreController;
 use App\Http\Controllers\User\StripeController;
+use App\Http\Controllers\User\WebhookController;
 use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -58,3 +59,4 @@ Route::post('/email/verification-notification', function () {
     Auth::user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+Route::post('/stripe_webhook', [WebhookController::class, 'handleWebhook']);

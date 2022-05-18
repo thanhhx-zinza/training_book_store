@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\Storage;
 class StoreControllerTest extends TestCase
 {
     use DatabaseTransactions;
-  
+
     public function testIndexStore()
     {
         Session::start();
-        $user = User::where('status', 'normal')->where('email_verified_at', '!=', null)->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $response = $this->get('/store');
         $response->assertViewIs('User.Store.index');
@@ -26,7 +26,7 @@ class StoreControllerTest extends TestCase
     public function testCreateStore()
     {
         Session::start();
-        $users = User::where('status', 'premium')->get();
+        $users = User::Premium()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) < 3) {
                 $this->be($user);
@@ -40,7 +40,7 @@ class StoreControllerTest extends TestCase
     public function testCreateStoreFail()
     {
         Session::start();
-        $users = User::where('status', 'normal')->where('email_verified_at', '!=', null)->get();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) >= 1) {
                 $this->be($user);
@@ -49,7 +49,7 @@ class StoreControllerTest extends TestCase
                 break;
             }
         }
-        $premiumUsers = User::where('status', 'premium')->where('email_verified_at', '!=', null)->get();
+        $premiumUsers = User::Premium()->Verified();
         foreach ($premiumUsers as $premiumUser) {
             if (count($premiumUser->stores) >= 3) {
                 $this->be($premiumUser);
@@ -64,9 +64,7 @@ class StoreControllerTest extends TestCase
     {
         Session::start();
         $faker = Factory::create();
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
-        $users = User::where('status', 'normal')->where('email_verified_at', '!=', null)->get();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) < 1) {
                 $this->be($user);
@@ -75,14 +73,14 @@ class StoreControllerTest extends TestCase
                     [
                         "name" => $faker->name,
                         "description" => $faker->text(),
-                        "image" => $file,
+                        "image" => $this->uploadFile(),
                     ]
                 );
                 $response->assertRedirect('/home');
                 break;
             }
         }
-        $premiumUsers = User::where('status', 'premium')->where('email_verified_at', '!=', null)->get();
+        $premiumUsers = User::Premium()->Verified();
         foreach ($premiumUsers as $premiumUser) {
             if (count($premiumUser->stores) < 3) {
                 $this->be($premiumUser);
@@ -91,7 +89,7 @@ class StoreControllerTest extends TestCase
                     [
                         "name" => $faker->name,
                         "description" => $faker->text(),
-                        "image" => $file,
+                        "image" => $this->uploadFile(),
                     ]
                 );
                 $response->assertRedirect('/home');
@@ -104,9 +102,7 @@ class StoreControllerTest extends TestCase
     {
         Session::start();
         $faker = Factory::create();
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
-        $users = User::where('status', 'normal')->where('email_verified_at', '!=', null)->get();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) >= 1) {
                 $this->be($user);
@@ -115,7 +111,7 @@ class StoreControllerTest extends TestCase
                     [
                         "name" => $faker->name,
                         "description" => $faker->text(),
-                        "image" => $file,
+                        "image" => $this->uploadFile(),
                     ]
                 );
                 $response->assertRedirect('/home');
@@ -123,7 +119,7 @@ class StoreControllerTest extends TestCase
                 break;
             }
         }
-        $premiumUsers = User::where('status', 'premium')->where('email_verified_at', '!=', null)->get();
+        $premiumUsers = User::Premium()->Verified();
         foreach ($premiumUsers as $premiumUser) {
             if (count($premiumUser->stores) >= 3) {
                 $this->be($premiumUser);
@@ -132,7 +128,7 @@ class StoreControllerTest extends TestCase
                     [
                         "name" => $faker->name,
                         "description" => $faker->text(),
-                        "image" => $file,
+                        "image" => $this->uploadFile(),
                     ]
                 );
                 $response->assertRedirect('/home');
@@ -145,7 +141,7 @@ class StoreControllerTest extends TestCase
     public function testShowStore()
     {
         Session::start();
-        $user = User::where('status', 'normal')->where('email_verified_at', '!=', null)->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $response = $this->get('/store/'.$user->stores->first()->id);
         $response->assertViewIs('User.Store.show');
@@ -154,7 +150,7 @@ class StoreControllerTest extends TestCase
     public function testEditStore()
     {
         Session::start();
-        $user = User::where('status', 'normal')->where('email_verified_at', '!=', null)->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $response = $this->get('/store/'.$user->stores->first()->id.'/edit');
         $response->assertViewIs('User.Store.edit');
@@ -164,9 +160,7 @@ class StoreControllerTest extends TestCase
     {
         Session::start();
         $faker = Factory::create();
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
-        $users = User::where('status', 'normal')->where('email_verified_at', '!=', null)->get();
+        $users = User::Normal()->Verified();
         foreach ($users as $user) {
             if (count($user->stores) <= 1) {
                 $this->be($user);
@@ -175,14 +169,14 @@ class StoreControllerTest extends TestCase
                     [
                         "name" => $faker->name,
                         "description" => $faker->text(),
-                        "image" => $file,
+                        "image" => $this->uploadFile(),
                     ]
                 );
                 $response->assertRedirect('/store');
                 break;
             }
         }
-        $premiumUsers = User::where('status', 'premium')->where('email_verified_at', '!=', null)->get();
+        $premiumUsers = User::Premium()->Verified();
         foreach ($premiumUsers as $premiumUser) {
             if (count($premiumUser->stores) <= 3) {
                 $this->be($premiumUser);
@@ -192,7 +186,7 @@ class StoreControllerTest extends TestCase
                         [
                             "name" => $faker->name,
                             "description" => $faker->text(),
-                            "image" => $file,
+                            "image" => $this->uploadFile(),
                         ]
                     );
                     $response->assertRedirect('/store');
@@ -206,7 +200,7 @@ class StoreControllerTest extends TestCase
     public function testDestroyStore()
     {
         Session::start();
-        $user = User::where('status', 'normal')->where('email_verified_at', '!=', null)->first();
+        $user = User::Normal()->Verified()->first();
         $this->be($user);
         $response = $this->delete('/store/'.$user->stores->first()->id);
         $response->assertRedirect('/home');

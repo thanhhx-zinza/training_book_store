@@ -40,8 +40,6 @@ class ProfileControllerTest extends TestCase
         );
         $response->assertOk();
         $faker = Factory::create();
-        Storage::fake('public');
-        $file = UploadedFile::fake()->image('avatar.jpg', 500, 500)->size(100);
         $response = $this->postJson(
             "/api/user-profile",
             [
@@ -52,7 +50,7 @@ class ProfileControllerTest extends TestCase
                 'phone_number' => $faker->phoneNumber,
                 "gender" => $faker->randomElement(['male', 'female']),
                 "address" => $faker->name,
-                'avatar' => $file,
+                'avatar' => $this->uploadFile(),
             ]
         );
         $response->assertOk();
